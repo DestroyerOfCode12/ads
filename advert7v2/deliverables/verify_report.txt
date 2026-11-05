@@ -1,0 +1,29 @@
+== Streams
+nimble_tech_solutions_advert7_shop_opens_sound.mp4
+  video 1080x1920 h264 fps(r) 30/1, frames counted 480, video duration 16.000000 s, container duration 16.000000 s
+  audio streams: 1 aac 48000 Hz 2 ch, duration 16.000000 s
+  metadata tags left: {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso2avc1mp41', 'stream0:language': 'und', 'stream0:handler_name': 'VideoHandler', 'stream0:vendor_id': '[0][0][0][0]', 'stream1:language': 'und', 'stream1:handler_name': 'SoundHandler', 'stream1:vendor_id': '[0][0][0][0]'}
+nimble_tech_solutions_advert7_shop_opens_silent.mp4
+  video 1080x1920 h264 fps(r) 30/1, frames counted 480, video duration 16.000000 s, container duration 16.000000 s
+  audio streams: 0 
+  metadata tags left: {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso2avc1mp41', 'stream0:language': 'und', 'stream0:handler_name': 'VideoHandler', 'stream0:vendor_id': '[0][0][0][0]'}
+
+== Loudness and true peak measured on the finished MP4 audio track
+  integrated -13.9 LUFS, true peak -3.5 dBTP, LRA 0.3 LU
+
+== Sound to picture (onsets found in the decoded MP4 audio vs. the frame each sound is cued to)
+  decoded audio samples 768000 (16.0000 s)
+  shutter clunk   cue frame  58 (1.933 s)  onset 1.883 s  offset -50 ms
+  light tick      cue frame  61 (2.033 s)  onset 1.985 s  offset -48 ms
+  phone buzz      cue frame 156 (5.200 s)  onset 5.192 s  offset -8 ms
+  notification    cue frame 166 (5.533 s)  onset 5.486 s  offset -47 ms
+  sign tap        cue frame 347 (11.567 s)  onset 11.517 s  offset -50 ms
+  end card hit    cue frame 386 (12.867 s)  onset 12.820 s  offset -47 ms
+  whole track offset vs pre encode mix: +0 samples (+0.00 ms); every cue is placed at its exact frame in code
+
+== Tool names / provenance strings left in files
+  PREVIEW_opening_shot_only.mp4                           ['Lavc', 'Lavf', 'libx264', 'x264']
+  nimble_tech_solutions_advert7_shop_opens_poster.jpg     none found
+  nimble_tech_solutions_advert7_shop_opens_poster.png     none found
+  nimble_tech_solutions_advert7_shop_opens_silent.mp4     none found
+  nimble_tech_solutions_advert7_shop_opens_sound.mp4      none found
