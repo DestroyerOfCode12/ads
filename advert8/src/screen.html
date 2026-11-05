@@ -1,0 +1,181 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+:root{--teal:#115E67;--warm:#F7F5F0;--mist:#D9ECEC;--ink:#18282A;--apricot:#F2B66D}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1600px;height:1000px;overflow:hidden;background:#fff;font-family:Inter,sans-serif;color:#1f2328}
+#win{position:absolute;inset:0;background:#fff}
+/* browser chrome (original, generic) */
+#tabs{height:46px;background:#dfe3e8;display:flex;align-items:flex-end;padding-left:92px;position:relative}
+.dots{position:absolute;left:20px;top:17px;display:flex;gap:9px}
+.dots i{width:13px;height:13px;border-radius:50%;background:#c4c9cf;display:block}
+.tab{height:37px;width:300px;background:#fff;border-radius:10px 10px 0 0;display:flex;align-items:center;padding:0 16px;gap:10px;font-size:14px;color:#30363d}
+.fav{width:16px;height:16px;border-radius:4px;background:#8a96a3;flex:none}
+.tab .x{margin-left:auto;color:#8b949e;font-size:13px}
+.newtab{margin:0 0 9px 12px;color:#57606a;font-size:20px}
+#bar{height:50px;display:flex;align-items:center;gap:16px;padding:0 18px;border-bottom:1px solid #e3e6ea}
+.nav{display:flex;gap:18px;color:#6e7781;font-size:18px}
+#url{flex:1;height:34px;border-radius:17px;background:#eef1f4;display:flex;align-items:center;padding:0 16px;gap:10px;font-size:15px;color:#30363d}
+.lock{width:11px;height:13px;border:2px solid #6e7781;border-radius:2px;position:relative;margin-top:3px}
+.lock:before{content:"";position:absolute;left:1px;top:-8px;width:5px;height:6px;border:2px solid #6e7781;border-bottom:none;border-radius:4px 4px 0 0}
+#page{position:absolute;top:96px;left:0;right:0;bottom:0;overflow:hidden}
+#progress{position:absolute;top:95px;left:0;height:3px;background:#3b82c4;width:0}
+/* search home */
+#home{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;padding-top:250px}
+.wordmark{font-size:58px;font-weight:600;letter-spacing:-1.5px;color:#2b3137;margin-bottom:34px}
+.wordmark span{color:#5b8db8}
+.sbox{width:760px;height:66px;border-radius:33px;border:1px solid #d0d7de;box-shadow:0 2px 8px rgba(31,35,40,.08);display:flex;align-items:center;padding:0 26px;gap:16px;font-size:26px;background:#fff}
+.mag{width:18px;height:18px;border:2.5px solid #8b949e;border-radius:50%;position:relative;flex:none}
+.mag:after{content:"";position:absolute;width:8px;height:2.5px;background:#8b949e;right:-7px;bottom:-4px;transform:rotate(45deg)}
+.caret{display:inline-block;width:2px;height:30px;background:#1f2328;vertical-align:-4px;margin-left:1px}
+.hints{margin-top:26px;display:flex;gap:12px}
+.hints b{font-weight:500;font-size:14px;color:#57606a;background:#f3f5f7;border-radius:8px;padding:9px 16px}
+/* results */
+#results{position:absolute;inset:0;display:none}
+.rtop{height:84px;display:flex;align-items:center;padding-left:40px;gap:36px;border-bottom:1px solid #eaeef2}
+.rtop .wordmark{font-size:30px;margin:0;letter-spacing:-.6px}
+.rtop .sbox{width:640px;height:48px;font-size:18px;box-shadow:none}
+.tabsr{display:flex;gap:26px;padding:0 0 0 150px;font-size:14px;color:#57606a;height:40px;align-items:center;border-bottom:1px solid #eaeef2}
+.tabsr .on{color:#1f2328;font-weight:600;border-bottom:3px solid #3b82c4;padding:9px 0 8px}
+.rcol{position:absolute;left:150px;top:132px;width:760px}
+.meta{font-size:13px;color:#6e7781;margin:4px 0 18px}
+.card{border:1px solid #e3e6ea;border-radius:16px;overflow:hidden;margin-bottom:24px;opacity:0;transform:translateY(10px)}
+#map{height:220px;position:relative;background:#eef0ea;overflow:hidden}
+.place{padding:16px 20px;display:flex;align-items:center;gap:16px}
+.place h4{font-size:24px;font-weight:600;color:#1f2328}
+.place p{font-size:17px;color:#57606a;margin-top:3px}
+.btns{margin-left:auto;display:flex;gap:10px}
+.btns b{font-size:13px;font-weight:600;color:var(--teal);border:1px solid #c9dcdd;border-radius:18px;padding:8px 14px}
+.res{margin-bottom:28px;opacity:0;transform:translateY(10px)}
+.site{display:flex;align-items:center;gap:10px;font-size:17px;color:#30363d}
+.site .ic{width:28px;height:28px;border-radius:50%;background:#eef1f4;display:flex;align-items:center;justify-content:center}
+.site small{display:block;font-size:12.5px;color:#6e7781}
+.res h3{font-size:26px;font-weight:500;color:#2a5db0;margin:8px 0 5px}
+.res p{font-size:18px;line-height:1.5;color:#4d5560}
+.res.hover h3{text-decoration:underline}
+.side{position:absolute;left:990px;top:140px;width:380px;opacity:0}
+.note{font-size:12px;color:#8b949e;margin-top:4px}
+/* site */
+#site{position:absolute;inset:0;display:none;background:var(--warm);font-family:"DejaVu Sans",sans-serif;color:var(--ink)}
+.snav{height:76px;background:#fff;display:flex;align-items:center;padding:0 70px;border-bottom:1px solid #e7e3da}
+.slogo{display:flex;flex-direction:column;line-height:1}
+.slogo b{font-weight:700;font-size:24px;color:var(--teal);letter-spacing:-.3px}
+.slogo span{font-size:12px;color:var(--ink);letter-spacing:2.6px;margin-top:3px}
+.snav .items{margin-left:auto;display:flex;gap:26px;align-items:center}
+.snav .items i{display:block;height:10px;border-radius:5px;background:#cfd8d8}
+.snav .items em{display:block;width:120px;height:38px;border-radius:19px;background:var(--apricot)}
+.hero{margin:34px 70px 0;height:400px;border-radius:22px;background:var(--teal);position:relative;overflow:hidden;padding:84px 70px}
+.hero h1{font-weight:700;font-size:68px;color:var(--warm);letter-spacing:-1px}
+.hero .l{height:14px;border-radius:7px;background:rgba(247,245,240,.35);margin-top:22px}
+.hero .cta{width:190px;height:54px;border-radius:27px;background:var(--apricot);margin-top:36px}
+.hero .blob{position:absolute;right:-60px;top:-40px;width:480px;height:480px;border-radius:50%;background:rgba(217,236,236,.14)}
+.hero .blob2{position:absolute;right:120px;bottom:-140px;width:300px;height:300px;border-radius:50%;background:rgba(242,182,109,.22)}
+.blocks{display:flex;gap:30px;margin:30px 70px 0}
+.blk{flex:1;height:300px;background:#fff;border-radius:18px;padding:22px;display:flex;gap:22px}
+.blk .img{width:44%;border-radius:12px;background:linear-gradient(135deg,var(--mist),#b9d8d9)}
+.blk .tx{flex:1;padding-top:8px}
+.blk .tx i{display:block;height:12px;border-radius:6px;background:#dfe5e4;margin-bottom:16px}
+.blk .tx i.h{height:20px;background:var(--teal);opacity:.85;width:70%;margin-bottom:24px}
+/* cursor */
+#cur{position:absolute;left:0;top:0;width:26px;height:38px;display:none;z-index:9;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}
+#ring{position:absolute;width:40px;height:40px;border-radius:50%;border:3px solid rgba(17,94,103,.6);display:none;z-index:8}
+</style></head><body>
+<div id="win">
+ <div id="tabs"><div class="dots"><i></i><i></i><i></i></div>
+  <div class="tab"><div class="fav" id="fav"></div><span id="tabt">New search</span><span class="x">✕</span></div><div class="newtab">+</div></div>
+ <div id="bar"><div class="nav"><span>←</span><span>→</span><span>↻</span></div>
+  <div id="url"><div class="lock"></div><span id="urlt">Search the web</span></div></div>
+ <div id="progress"></div>
+ <div id="page">
+  <div id="home"><div class="wordmark">find<span>.</span></div>
+   <div class="sbox"><div class="mag"></div><span id="q1"></span></div>
+   <div class="hints"><b>Near me</b><b>Today</b><b>Images</b></div></div>
+
+  <div id="results">
+   <div class="rtop"><div class="wordmark">find<span>.</span></div><div class="sbox"><div class="mag"></div><span id="q2"></span></div></div>
+   <div class="tabsr"><span class="on">All</span><span>Maps</span><span>Images</span><span>News</span></div>
+   <div class="rcol">
+    <div class="meta">Results near Midrand, Gauteng</div>
+    <div class="card" id="c0"><div id="map"><svg width="760" height="220" viewBox="0 0 720 220" preserveAspectRatio="none">
+      <rect width="720" height="220" fill="#eceee7"/>
+      <path d="M0 160 C150 140 240 175 380 150 S600 120 720 132" stroke="#fff" stroke-width="18" fill="none"/>
+      <path d="M0 160 C150 140 240 175 380 150 S600 120 720 132" stroke="#f3d79a" stroke-width="10" fill="none"/>
+      <path d="M250 0 C262 70 300 120 290 220" stroke="#fff" stroke-width="12" fill="none"/>
+      <path d="M520 0 L470 220" stroke="#fff" stroke-width="9" fill="none"/>
+      <path d="M0 70 L720 40" stroke="#fff" stroke-width="7" fill="none"/>
+      <path d="M90 0 L140 220 M640 0 L690 220 M0 205 L720 190" stroke="#fff" stroke-width="5" fill="none"/>
+      <rect x="560" y="60" width="110" height="60" rx="8" fill="#d6e6cf"/>
+      <rect x="40" y="88" width="80" height="44" rx="6" fill="#d6e6cf"/>
+      <path d="M330 0 C360 40 420 60 460 110" stroke="#c9dceb" stroke-width="6" fill="none"/>
+      <text x="150" y="122" font-family="Inter" font-size="15" font-weight="600" fill="#6e7781" letter-spacing="2">MIDRAND</text>
+     </svg>
+     <div id="pin" style="position:absolute;left:380px;top:40px;opacity:0">
+      <svg width="44" height="58" viewBox="0 0 44 58"><ellipse cx="22" cy="55" rx="9" ry="3" fill="rgba(0,0,0,.2)"/><path d="M22 2C11 2 3 10 3 21c0 14 19 32 19 32s19-18 19-32C41 10 33 2 22 2z" fill="#115E67" stroke="#fff" stroke-width="3"/><circle cx="22" cy="21" r="7" fill="#F2B66D"/></svg>
+      <div style="position:absolute;left:50px;top:10px;white-space:nowrap;background:#fff;border-radius:8px;padding:6px 10px;font-size:14px;font-weight:600;color:#115E67;box-shadow:0 2px 6px rgba(0,0,0,.15)">Nimble Tech Solutions</div>
+     </div></div>
+     <div class="place"><div><h4>Nimble Tech Solutions</h4><p>Web designer · Midrand, Gauteng</p></div>
+      <div class="btns"><b>Website</b><b>Directions</b><b>Call</b></div></div></div>
+    <div class="res" id="r1"><div class="site"><div class="ic"><div style="width:14px;height:14px;border-radius:4px;background:#115E67"></div></div><div>Nimble Tech Solutions<small>Midrand, Gauteng</small></div></div>
+     <h3>Website design and development in Midrand</h3>
+     <p>Websites, business email setup, web hosting, SEO and video advertising for small businesses in greater Johannesburg and remote clients.</p></div>
+    <div class="res" id="r2"><div class="site"><div class="ic"><div style="width:14px;height:14px;border-radius:50%;background:#9aa5b1"></div></div><div>Small business guides<small>guides</small></div></div>
+     <h3>Choosing a web designer: a short checklist</h3>
+     <p>What to ask before you start a new website, from domains and hosting to email and search visibility.</p></div>
+    <div class="res" id="r3"><div class="site"><div class="ic"><div style="width:14px;height:14px;border-radius:3px;background:#b4bcc5"></div></div><div>Local listings<small>listings</small></div></div>
+     <h3>Web design services around Gauteng</h3>
+     <p>Browse local options for websites, hosting and online marketing near you.</p></div>
+   </div>
+  </div>
+
+  <div id="site">
+   <div class="snav"><div class="slogo"><b>Nimble Tech</b><span>SOLUTIONS</span></div>
+    <div class="items"><i style="width:70px"></i><i style="width:60px"></i><i style="width:76px"></i><em></em></div></div>
+   <div class="hero"><div class="blob"></div><div class="blob2"></div><h1 id="hl">Your business, online</h1>
+    <div class="l" style="width:520px"></div><div class="l" style="width:400px"></div><div class="cta"></div></div>
+   <div class="blocks">
+    <div class="blk"><div class="img"></div><div class="tx"><i class="h"></i><i></i><i style="width:85%"></i><i style="width:60%"></i></div></div>
+    <div class="blk"><div class="img" style="background:linear-gradient(135deg,#f6dcb3,#F2B66D)"></div><div class="tx"><i class="h"></i><i></i><i style="width:80%"></i><i style="width:65%"></i></div></div>
+   </div>
+  </div>
+ </div>
+ <svg id="cur" viewBox="0 0 26 38"><path d="M2 2 L2 30 L9 23.5 L14 35 L19 33 L14 21.5 L23.5 21.5 Z" fill="#111" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>
+ <div id="ring"></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const clamp=v=>Math.max(0,Math.min(1,v));
+const ease=t=>{t=clamp(t);return 1-Math.pow(1-t,3)};
+function show(el,t){el.style.opacity=ease(t);el.style.transform=`translateY(${(1-ease(t))*10}px)`}
+window.setState=function(s){
+  $('home').style.display=s.scene==='home'?'flex':'none';
+  $('results').style.display=s.scene==='results'?'block':'none';
+  $('site').style.display=s.scene==='site'?'block':'none';
+  const caret=s.caret?'<span class="caret"></span>':'';
+  $('q1').innerHTML=(s.q||'')+caret;
+  $('q2').innerHTML=(s.q||'');
+  $('progress').style.width=(s.progress||0)*100+'%';
+  $('progress').style.opacity=(s.progress>0&&s.progress<1)?1:0;
+  if(s.scene==='home'){$('tabt').textContent='New search';$('urlt').textContent='Search the web';$('fav').style.background='#8a96a3'}
+  if(s.scene==='results'){
+    $('tabt').textContent=(s.q||'')+' : find';$('urlt').textContent='find  ·  '+(s.q||'');$('fav').style.background='#5b8db8';
+    const r=s.reveal||0;
+    show($('c0'),r*3);show($('r1'),r*3-0.5);show($('r2'),r*3-1);show($('r3'),r*3-1.4);
+    const p=ease(s.pin||0);$('pin').style.opacity=p;$('pin').style.transform=`translateY(${(1-p)*-30}px)`;
+    $('r1').classList.toggle('hover',!!s.hover);
+  }
+  if(s.scene==='site'){
+    $('tabt').textContent='Nimble Tech Solutions';$('urlt').textContent='Nimble Tech Solutions';$('fav').style.background='#115E67';
+    const t=s.load===undefined?1:s.load;
+    document.querySelector('.snav').style.opacity=ease(t*3);
+    show(document.querySelector('.hero'),t*2.2-0.3);
+    document.querySelectorAll('.blk').forEach((b,i)=>show(b,t*2.2-0.9-i*0.25));
+  }
+  const c=$('cur');
+  if(s.cur){c.style.display='block';c.style.left=s.cur[0]+'px';c.style.top=s.cur[1]+'px';c.style.transform=`scale(${s.press?0.9:1})`;}
+  else c.style.display='none';
+  const rg=$('ring');
+  if(s.ring!==undefined&&s.ring>0&&s.ring<1&&s.cur){rg.style.display='block';const sz=20+50*s.ring;rg.style.width=rg.style.height=sz+'px';rg.style.left=(s.cur[0]+2-sz/2)+'px';rg.style.top=(s.cur[1]+2-sz/2)+'px';rg.style.opacity=1-s.ring}
+  else rg.style.display='none';
+};
+window.setState({scene:'home',q:'',caret:true});
+</script></body></html>
