@@ -1,0 +1,4 @@
+build/
+assets/
+__pycache__/
+deliverables/*.mp4
