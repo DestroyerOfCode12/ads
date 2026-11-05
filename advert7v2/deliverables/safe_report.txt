@@ -1,0 +1,5 @@
+phone_title      readable frames 172..239
+phone_body       readable frames 172..239
+laptop_headline  readable frames 258..329
+sign_word        readable frames 330..395
+violations: {}
