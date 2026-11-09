@@ -1,0 +1,26 @@
+== Streams
+nimble_tech_solutions_n_city_sound.mp4
+  video 1080x1920 h264 fps(r) 30/1, frames counted 480, video duration 16.000000 s, container duration 16.000000 s
+  audio streams: 1 aac 48000 Hz 2 ch, duration 16.000000 s
+  metadata tags left: {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso2avc1mp41', 'stream0:language': 'und', 'stream0:handler_name': 'VideoHandler', 'stream0:vendor_id': '[0][0][0][0]', 'stream1:language': 'und', 'stream1:handler_name': 'SoundHandler', 'stream1:vendor_id': '[0][0][0][0]'}
+nimble_tech_solutions_n_city_silent.mp4
+  video 1080x1920 h264 fps(r) 30/1, frames counted 480, video duration 16.000000 s, container duration 16.000000 s
+  audio streams: 0 
+  metadata tags left: {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso2avc1mp41', 'stream0:language': 'und', 'stream0:handler_name': 'VideoHandler', 'stream0:vendor_id': '[0][0][0][0]'}
+
+== Loudness and true peak measured on the finished MP4 audio track
+  integrated -13.6 LUFS, true peak -2.1 dBTP, LRA 1.8 LU
+
+== Sound to picture (onsets found in the decoded MP4 audio vs. the frame each sound is cued to)
+  decoded audio samples 768000 (16.0000 s)
+  rack focus      cue frame  30 (1.000 s)  onset 0.950 s  offset -50 ms
+  crane           cue frame 150 (5.000 s)  onset 5.001 s  offset +1 ms
+  sign settles    cue frame 277 (9.233 s)  onset 9.185 s  offset -49 ms
+  end card hit    cue frame 405 (13.500 s)  onset 13.499 s  offset -1 ms
+  whole track offset vs pre encode mix: +0 samples (+0.00 ms); every cue is placed at its exact frame in code
+
+== Tool names / provenance strings left in files
+  nimble_tech_solutions_n_city_poster.jpg                 none found
+  nimble_tech_solutions_n_city_poster.png                 none found
+  nimble_tech_solutions_n_city_silent.mp4                 none found
+  nimble_tech_solutions_n_city_sound.mp4                  none found
