@@ -1,0 +1,285 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#F7F5F0;font-family:"DejaVu Sans",sans-serif}
+canvas{display:block}
+#end{position:absolute;inset:0;background:#115E67;clip-path:circle(0px at 500px 900px)}
+.abs{position:absolute}
+</style>
+<script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js","three/addons/":"/node_modules/three/examples/jsm/"}}</script>
+</head><body>
+<div id="end">
+  <svg class="abs" width="1080" height="1920" style="left:0;top:0"><defs><pattern id="ang" width="180" height="180" patternUnits="userSpaceOnUse" patternTransform="rotate(30)"><path d="M0 0 L90 90 L0 180 M90 90 L180 0 M90 90 L180 180" stroke="#F7F5F0" stroke-opacity=".07" stroke-width="2" fill="none"/></pattern></defs><rect x="-400" y="-400" width="1880" height="2720" fill="url(#ang)"/></svg>
+  <div class="abs" style="left:96px;width:808px;top:600px;text-align:center;overflow:hidden;height:330px"><div id="logo" style="transform:translateY(330px)">
+    <div style="font-family:P052;font-weight:700;font-size:172px;color:#fff;line-height:1">Nimble</div>
+    <div style="width:150px;height:12px;border-radius:6px;background:#F2B66D;margin:22px auto 18px"></div>
+    <div style="font-size:68px;color:#fff;letter-spacing:1px">Tech Solutions</div></div></div>
+  <div id="e1" class="abs" style="left:96px;width:808px;top:1030px;text-align:center;font-size:46px;color:#F7F5F0;opacity:0">Websites and digital services</div>
+  <div id="e2" class="abs" style="left:96px;width:808px;top:1118px;text-align:center;font-size:50px;font-weight:700;color:#F2B66D;opacity:0">WhatsApp 068 178 9708</div>
+  <div id="e3" class="abs" style="left:96px;width:808px;top:1206px;text-align:center;font-size:40px;color:#D9ECEC;opacity:0">Midrand, Johannesburg, Remote</div>
+</div>
+<script type="module">
+import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { BokehPass } from 'three/addons/postprocessing/BokehPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+const W = 1080, H = 1920, FPS = 30;
+const TEAL = 0x115E67, WARM = 0xF7F5F0, MIST = 0xD9ECEC, INK = 0x18282A, APRICOT = 0xF2B66D;
+// shots (frames): cuts land on the 120 bpm beat (15 frames)
+const S = { s1: [0, 75], s2: [75, 150], s3: [150, 225], s4: [225, 315], s5: [315, 405], end: 405 };
+
+// ---------- seeded randomness (render must match preview)
+let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+const C01 = v => Math.max(0, Math.min(1, v)), lerp = (a, b, t) => a + (b - a) * t;
+const eIO = t => { t = C01(t); return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+const eOut = t => 1 - Math.pow(1 - C01(t), 3);
+const seg = (f, a, b) => C01((f - a) / (b - a));
+const spring = (t, k = 9, z = 0.35) => t <= 0 ? 0 : 1 - Math.exp(-z * k * t) * Math.cos(k * Math.sqrt(1 - z * z) * t);
+
+// ---------- renderer
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(W, H); renderer.setPixelRatio(1);
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+document.body.prepend(renderer.domElement);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xEFEBE3);
+scene.fog = new THREE.Fog(0xEFEBE3, 60, 260);
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = 0.55;
+
+// lighting: warm key with soft shadows, cool fill, rim from behind
+const key = new THREE.DirectionalLight(0xfff1df, 2.6); key.position.set(-70, 120, 60);
+key.castShadow = true; key.shadow.mapSize.set(4096, 4096);
+Object.assign(key.shadow.camera, { left: -110, right: 110, top: 110, bottom: -110, near: 20, far: 320 });
+key.shadow.bias = -0.0004; key.shadow.normalBias = 0.03; key.shadow.radius = 4;
+scene.add(key, key.target);
+const fill = new THREE.HemisphereLight(0xe6f2f2, 0xd8cfc2, 0.9); scene.add(fill);
+const rim = new THREE.DirectionalLight(0xdfeeee, 0.9); rim.position.set(80, 40, -120); scene.add(rim);
+
+// ---------- the N: three streets (plan view, screen up = -z)
+const NS = [ [[-48, 80], [-48, -80]], [[-48, -80], [48, 80]], [[48, 80], [48, -80]] ];   // left, diagonal, right
+const STREET = 9;
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(900, 900), new THREE.MeshPhysicalMaterial({ color: 0xF4F1EA, roughness: 0.92 }));
+ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
+const streetMat = new THREE.MeshPhysicalMaterial({ color: 0x5f9a9e, roughness: 0.7 });
+const strokeLen = NS.map(([a, b]) => Math.hypot(b[0] - a[0], b[1] - a[1]));
+NS.forEach(([a, b], i) => {
+  const len = strokeLen[i] + STREET, ang = Math.atan2(b[1] - a[1], b[0] - a[0]);
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(len, STREET), streetMat);
+  m.rotation.x = -Math.PI / 2; m.rotation.z = -ang; m.position.set((a[0] + b[0]) / 2, 0.02, (a[1] + b[1]) / 2); m.receiveShadow = true; scene.add(m);
+});
+
+// the apricot light that traces the N (a glowing strip that grows stroke by stroke)
+const traceMat = new THREE.MeshPhysicalMaterial({ color: APRICOT, emissive: APRICOT, emissiveIntensity: 2.2, roughness: 0.4 });
+const traces = NS.map(([a, b], i) => {
+  const ang = Math.atan2(b[1] - a[1], b[0] - a[0]);
+  const g = new THREE.BoxGeometry(1, 0.3, 3.2); g.translate(0.5, 0, 0);
+  const m = new THREE.Mesh(g, traceMat); m.position.set(a[0], 0.15, a[1]); m.rotation.y = -ang; m.scale.x = 0.0001; scene.add(m); return m;
+});
+const traceLight = new THREE.PointLight(APRICOT, 0, 40, 1.6); scene.add(traceLight);
+
+// ---------- website textures for the shopfronts (canvas, brand palette, varied layouts)
+const PAL = ['#115E67', '#F2B66D', '#18282A', '#D9ECEC', '#2f7f87'];
+function siteTex(v) {
+  const c = document.createElement('canvas'); c.width = 512; c.height = 384; const x = c.getContext('2d');
+  x.fillStyle = '#F7F5F0'; x.fillRect(0, 0, 512, 384);
+  x.fillStyle = '#ffffff'; x.fillRect(0, 0, 512, 52);
+  x.fillStyle = PAL[v % 5 === 3 ? 0 : v % 5]; x.fillRect(22, 18, 90, 16);
+  x.fillStyle = '#cfd8d8'; for (let i = 0; i < 3; i++) x.fillRect(300 + i * 50, 22, 36, 8);
+  x.fillStyle = '#F2B66D'; x.beginPath(); x.roundRect(450, 14, 46, 24, 12); x.fill();
+  const hero = PAL[(v * 3) % 5]; x.fillStyle = hero; x.beginPath(); x.roundRect(18, 66, 476, 170, 16); x.fill();
+  x.fillStyle = hero === '#D9ECEC' || hero === '#F2B66D' ? '#18282A' : '#F7F5F0';
+  x.fillRect(42, 100, 220 + (v % 3) * 40, 22); x.fillRect(42, 132, 160, 22);
+  x.globalAlpha = .45; x.fillRect(42, 172, 260, 10); x.globalAlpha = 1;
+  x.fillStyle = hero === '#F2B66D' ? '#115E67' : '#F2B66D'; x.beginPath(); x.roundRect(42, 194, 96, 26, 13); x.fill();
+  x.fillStyle = 'rgba(255,255,255,.18)'; x.beginPath(); x.arc(440, 90, 70, 0, 7); x.fill();
+  for (let i = 0; i < 2; i++) {
+    x.fillStyle = '#ffffff'; x.beginPath(); x.roundRect(18 + i * 246, 252, 230, 116, 12); x.fill();
+    x.fillStyle = i ? '#F2B66D' : '#D9ECEC'; x.beginPath(); x.roundRect(30 + i * 246, 264, 80, 92, 8); x.fill();
+    x.fillStyle = '#115E67'; x.fillRect(124 + i * 246, 274, 90, 12); x.fillStyle = '#d7dfde'; x.fillRect(124 + i * 246, 298, 104, 8); x.fillRect(124 + i * 246, 314, 80, 8);
+  }
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
+}
+const TEX = Array.from({ length: 10 }, (_, i) => siteTex(i));
+
+// ---------- buildings along both sides of each stroke, shopfront facing the street
+const buildings = [];
+const bodyMats = [0xF7F5F0, 0xEFEDE6, 0xE4EEEE, 0xF2EEE6].map(c => new THREE.MeshPhysicalMaterial({ color: c, roughness: 0.62, clearcoat: 0.15, clearcoatRoughness: 0.6 }));
+const trimMat = new THREE.MeshPhysicalMaterial({ color: TEAL, roughness: 0.45, metalness: 0.1 });
+const awnMats = [new THREE.MeshPhysicalMaterial({ color: TEAL, roughness: 0.55, sheen: 1, sheenColor: new THREE.Color(0x9fd0d2) }), new THREE.MeshPhysicalMaterial({ color: 0xE9EEEC, roughness: 0.6 })];
+const awnAccent = new THREE.MeshPhysicalMaterial({ color: APRICOT, roughness: 0.55 });
+let bid = 0;
+NS.forEach(([a, b], si) => {
+  const L = strokeLen[si], dx = (b[0] - a[0]) / L, dz = (b[1] - a[1]) / L, nx = -dz, nz = dx;
+  for (const side of [-1, 1]) {
+    for (let s = 6; s < L - 4; s += 6.2) {
+      // keep corners clear where strokes meet
+      const w = 5.2, d = 5 + rnd() * 3, h = 4.5 + rnd() * 9 + (rnd() < .12 ? 6 : 0);
+      const off = STREET / 2 + d / 2 + 0.6;
+      const cx = a[0] + dx * s + nx * off * side, cz = a[1] + dz * s + nz * off * side;
+      // skip buildings that would sit inside another street
+      let blocked = false;
+      NS.forEach(([p, q], j) => { if (j === si) return; const lx = q[0] - p[0], lz = q[1] - p[1], ll = lx * lx + lz * lz; let t = ((cx - p[0]) * lx + (cz - p[1]) * lz) / ll; t = C01(t); const ex = p[0] + lx * t - cx, ez = p[1] + lz * t - cz; if (Math.hypot(ex, ez) < STREET / 2 + 4.5) blocked = true; });
+      if (blocked) continue;
+      const g = new THREE.Group(); g.position.set(cx, 0, cz);
+      g.rotation.y = Math.atan2(-nx * side, -nz * side);     // local +z faces the street
+      const body = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 3, 0.35), bodyMats[bid % 4]);
+      body.position.y = h / 2; body.castShadow = body.receiveShadow = true; g.add(body);
+      if (rnd() < 0.5) { const tr = new THREE.Mesh(new RoundedBoxGeometry(w + 0.2, 0.35, d + 0.2, 2, 0.12), trimMat); tr.position.y = h; tr.castShadow = true; g.add(tr); }
+      const tex = TEX[bid % TEX.length];
+      const sm = new THREE.MeshPhysicalMaterial({ map: tex, emissiveMap: tex, emissive: 0xffffff, emissiveIntensity: 0.18, roughness: 0.18, clearcoat: 1, clearcoatRoughness: 0.08 });
+      const screen = new THREE.Mesh(new THREE.PlaneGeometry(w * 0.78, w * 0.78 * 0.75), sm);
+      screen.position.set(0, 2.15, d / 2 + 0.03); g.add(screen);
+      const awn = new THREE.Mesh(new RoundedBoxGeometry(w * 0.9, 0.22, 1.3, 2, 0.08), bid % 11 === 3 ? awnAccent : awnMats[bid % 2]);
+      awn.position.set(0, 3.95, d / 2 + 0.6); awn.rotation.x = 0.18; awn.castShadow = true; g.add(awn);
+      scene.add(g);
+      buildings.push({ g, screen, sm, si, s, side, h, d, w, along: s / L });
+      bid++;
+    }
+  }
+});
+
+// ---------- the hanging sign that swings toward camera in shot 4 (on the left street)
+function signTex(front) {
+  const c = document.createElement('canvas'); c.width = 780; c.height = 1000; const x = c.getContext('2d');
+  x.fillStyle = front ? '#F7F5F0' : '#115E67'; x.fillRect(0, 0, 780, 1000);
+  x.strokeStyle = front ? '#115E67' : '#F2B66D'; x.lineWidth = 16; x.beginPath(); x.roundRect(30, 30, 720, 940, 44); x.stroke();
+  x.textAlign = 'center'; x.textBaseline = 'middle';
+  if (front) { x.fillStyle = '#115E67'; x.font = 'bold 520px P052'; x.fillText('N', 390, 520); }
+  else {
+    x.fillStyle = '#F7F5F0'; x.font = 'bold 116px "DejaVu Sans"';
+    x.fillText('Your', 390, 300); x.fillText('business,', 390, 450); x.fillText('online', 390, 600);
+    x.fillStyle = '#F2B66D'; x.beginPath(); x.roundRect(320, 730, 140, 16, 8); x.fill();
+  }
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
+}
+const signHost = buildings.find(b => b.si === 0 && b.side === 1 && b.s > 60);
+const signPivot = new THREE.Group();
+const SW = 2.8, SH = 3.6;
+const signBody = new THREE.Mesh(new RoundedBoxGeometry(SW, SH, 0.25, 3, 0.08), new THREE.MeshPhysicalMaterial({ color: 0xF7F5F0, roughness: 0.5 }));
+signBody.castShadow = true;
+const sF = new THREE.Mesh(new THREE.PlaneGeometry(SW * 0.96, SH * 0.94), new THREE.MeshPhysicalMaterial({ map: signTex(true), roughness: 0.45, clearcoat: 0.6 }));
+sF.position.z = 0.13;
+const sB = new THREE.Mesh(new THREE.PlaneGeometry(SW * 0.96, SH * 0.94), new THREE.MeshPhysicalMaterial({ map: signTex(false), roughness: 0.45, clearcoat: 0.6, emissive: 0xffffff, emissiveMap: signTex(false), emissiveIntensity: 0.12 }));
+sB.position.z = -0.13; sB.rotation.y = Math.PI;
+const signInner = new THREE.Group(); signInner.add(signBody, sF, sB); signInner.position.y = -SH / 2 - 0.3;
+const rod = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 3.4, 12), new THREE.MeshPhysicalMaterial({ color: INK, roughness: 0.35, metalness: 0.8 }));
+rod.rotation.x = Math.PI / 2; rod.position.z = 1.7;            // bracket sticks out of the facade into the street
+signPivot.add(signInner); signPivot.position.z = 2.9; signPivot.rotation.order = 'YXZ';
+const mount = new THREE.Group(); mount.add(rod, signPivot);
+signHost.g.add(mount); mount.position.set(signHost.w * 0.5 - 0.5, 8.4, signHost.d / 2);
+
+// ---------- camera, composer
+const cam = new THREE.PerspectiveCamera(38, W / H, 0.1, 420);
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, cam));
+const bokeh = new BokehPass(scene, cam, { focus: 3, aperture: 0.0025, maxblur: 0.012 }); composer.addPass(bokeh);
+composer.addPass(new OutputPass());
+
+// helper: world positions along a stroke
+const along = (si, s, lateral = 0, y = 0) => { const [a, b] = NS[si], L = strokeLen[si]; const dx = (b[0] - a[0]) / L, dz = (b[1] - a[1]) / L; return new THREE.Vector3(a[0] + dx * s - dz * lateral, y, a[1] + dz * s + dx * lateral); };
+
+const hero = buildings.find(b => b.si === 0 && b.side === -1 && b.s > 40 && b.s < 60);    // the macro shopfront
+const heroScreenPos = () => hero.screen.getWorldPosition(new THREE.Vector3());
+
+// camera keys per shot: [frame, position, target, fov, focusDist|null]
+function camAt(f) {
+  const hp = heroScreenPos();
+  const hn = new THREE.Vector3(0, 0, 1).applyQuaternion(hero.g.quaternion);   // hero shopfront normal (into the street)
+  const hx = new THREE.Vector3(1, 0, 0).applyQuaternion(hero.g.quaternion);
+  const K = {
+    a: [hp.clone().addScaledVector(hn, 3.6).addScaledVector(hx, 7.5).add(new THREE.Vector3(0, 0.5, 0)), hp.clone().addScaledVector(hx, 0.8).add(new THREE.Vector3(0, 0.6, 0)), 52],
+    b: [hp.clone().addScaledVector(hn, 3.2).addScaledVector(hx, 5.0).add(new THREE.Vector3(0, 0.1, 0)), hp.clone().add(new THREE.Vector3(0, 0.3, 0)), 46],
+    c: [along(0, 70, 0, 3.0), along(0, 26, 0, 2.6), 46],      // in the street, looking down it
+    d: [along(0, 118, 0, 3.4), along(0, 40, 0, 3.0), 46],     // dolly back
+    e: [along(0, 120, 0, 34), along(0, 60, 0, 0), 44],        // crane up over the rooftops
+    f: [new THREE.Vector3(-20, 62, 70), new THREE.Vector3(-6, 0, 18), 44],
+    g: [null, null, 40], h: [null, null, 38],
+    i: [new THREE.Vector3(-4, 150, 40), new THREE.Vector3(0, 0, 6), 50],
+    j: [new THREE.Vector3(0, 290, 0.01), new THREE.Vector3(0, 0, 0), 50],
+  };
+  // sign shot: camera in the left street facing the sign
+  const sp = signPivot.getWorldPosition(new THREE.Vector3());
+  const bx = new THREE.Vector3(1, 0, 0).applyQuaternion(signHost.g.quaternion), bz = new THREE.Vector3(0, 0, 1).applyQuaternion(signHost.g.quaternion);
+  const sc = sp.clone().add(new THREE.Vector3(0, -2.1, 0));   // sign centre
+  K.g = [sc.clone().addScaledVector(bx, 11).addScaledVector(bz, 0.8).add(new THREE.Vector3(0, -1.4, 0)), sc.clone(), 50];
+  K.h = [sc.clone().addScaledVector(bx, 7.4).addScaledVector(bz, 0.2).add(new THREE.Vector3(0, -0.5, 0)), sc.clone(), 50];
+  // one named move per shot: push in, dolly back, crane up, push in, pull back and up
+  const SEGS = [[S.s1[0], S.s1[1], 'a', 'b'], [S.s2[0], S.s2[1], 'c', 'd'], [S.s3[0], S.s3[1], 'd', 'e'],
+                [S.s4[0], S.s4[1], 'g', 'h'], [S.s5[0], S.s5[0] + 34, 'f', 'i'], [S.s5[0] + 34, S.s5[0] + 76, 'i', 'j'], [S.s5[0] + 76, 9999, 'j', 'j']];
+  const sg = SEGS.find(x => f >= x[0] && f < x[1]) || SEGS[SEGS.length - 1];
+  const t = sg[1] === 9999 ? 1 : eIO((f - sg[0]) / (sg[1] - sg[0]));
+  const A = K[sg[2]], B = K[sg[3]];
+  const pos = A[0].clone().lerp(B[0], t), tgt = A[1].clone().lerp(B[1], t);
+  return { pos, tgt, fov: lerp(A[2], B[2], t) };
+}
+
+// ---------- per frame
+function update(f) {
+  seed = 7;
+  // wave of apricot light along the left street in shot 2: each shopfront brightens and its building does a springy hop
+  const waveS = lerp(-10, 150, seg(f, S.s2[0] + 4, S.s2[1] + 30));
+  for (const b of buildings) {
+    let hop = 0, glow = 0.18;
+    if (b.si === 0) {
+      const d = (waveS - b.s) / 14;
+      if (d > 0) { hop = Math.sin(d * 5) * Math.exp(-d * 1.6) * 0.9; glow += Math.exp(-d * 1.2) * 1.4 * C01(d * 6); }
+    }
+    // in the signature shot every shopfront glows as the trace passes its stroke
+    if (f >= S.s5[0]) {
+      const p = tracePos(f), passed = p.stroke > b.si || (p.stroke === b.si && p.t * strokeLen[b.si] > b.s);
+      if (passed) glow = Math.max(glow, 0.9);
+    }
+    b.g.position.y = Math.max(0, hop) * 0.6; b.g.rotation.z = hop * 0.025;
+    b.sm.emissiveIntensity = glow;
+  }
+  // the sign: hangs, unhinges with weight, swings toward camera, flips to show the line
+  const st = f - S.s4[0];
+  const swing = st > 8 ? Math.exp(-0.06 * (st - 8)) * Math.sin((st - 8) * 0.28) * 0.9 : 0;
+  const flip = eIO(seg(f, S.s4[0] + 30, S.s4[0] + 52));
+  const settle = spring(Math.max(0, (f - S.s4[0] - 30) / 30) * 2.2, 7, 0.4);
+  const yaw = Math.PI / 2 + (f >= S.s4[0] + 30 ? Math.PI * Math.min(1.08, settle) : 0);
+  signPivot.rotation.set(swing, yaw, 0);
+  signPivot.visible = f >= S.s4[0];   // the sign is revealed in its own shot
+  // trace growth
+  const tp = tracePos(f);
+  traces.forEach((m, i) => { m.scale.x = Math.max(0.0001, i < tp.stroke ? strokeLen[i] : i === tp.stroke ? tp.t * strokeLen[i] : 0.0001); });
+  const head = along(tp.stroke, tp.t * strokeLen[tp.stroke], 0, 3);
+  traceLight.position.copy(head); traceLight.intensity = f >= S.s5[0] - 5 && f < S.end + 20 ? 6000 : 0;
+  traceMat.emissiveIntensity = 2.2 + Math.sin(f * 0.3) * 0.2;
+  // camera
+  const c = camAt(f); cam.position.copy(c.pos);
+  const fogT = seg(f, S.s5[0], S.s5[0] + 40); scene.fog.near = lerp(60, 320, fogT); scene.fog.far = lerp(260, 900, fogT);
+  const upT = eIO(seg(f, S.s5[0], S.s5[0] + 40)); cam.up.set(0, 1 - upT, -upT).normalize(); cam.lookAt(c.tgt); cam.fov = c.fov; cam.updateProjectionMatrix();
+  // depth of field only where it matters: rack focus in shot 1, soft background in shot 4
+  bokeh.enabled = f < S.s1[1] || (f >= S.s4[0] && f < S.s4[1]);
+  if (f < S.s1[1]) {
+    const dScreen = cam.position.distanceTo(heroScreenPos());
+    bokeh.uniforms.focus.value = lerp(1.0, dScreen, eIO(seg(f, 12, 44))); bokeh.uniforms.aperture.value = 0.006; bokeh.uniforms.maxblur.value = 0.014;
+  } else if (bokeh.enabled) {
+    bokeh.uniforms.focus.value = cam.position.distanceTo(signPivot.getWorldPosition(new THREE.Vector3())) + 2.4; bokeh.uniforms.aperture.value = 0.0012; bokeh.uniforms.maxblur.value = 0.008;
+  }
+  // end card
+  const e = eIO(seg(f, S.end, S.end + 14));
+  document.getElementById('end').style.clipPath = `circle(${e * 1500}px at 500px 900px)`;
+  const lp = spring(Math.max(0, (f - S.end - 6) / 16) * 2.4, 8, 0.6);
+  document.getElementById('logo').style.transform = f >= S.end + 30 ? 'translateY(0px)' : `translateY(${(1 - Math.min(lp, 1.04)) * 330}px)`;
+  [['e1', S.end + 14], ['e2', S.end + 20], ['e3', S.end + 26]].forEach(([id, a]) => { const p = eOut(seg(f, a, a + 8)); const el = document.getElementById(id); el.style.opacity = p; el.style.transform = `translateY(${(1 - p) * 24}px)`; });
+}
+function tracePos(f) {
+  const p = seg(f, S.s5[0] + 6, S.s5[1] - 6) * 3;
+  const stroke = Math.min(2, Math.floor(p)); return { stroke, t: p >= 3 ? 1 : eIO(p - stroke) };
+}
+window.renderFrame = f => { update(f); composer.render(); return true; };
+// projected corners of the sign's text area (for the safe zone check)
+window.signBox = f => { update(f); const v = [[-1.15, -1.5], [1.15, -1.5], [1.15, 1.5], [-1.15, 1.5]].map(([x, y]) => { const p = new THREE.Vector3(x, y, 0); signInner.localToWorld(p); p.project(cam); return [(p.x + 1) / 2 * W, (1 - p.y) / 2 * H, p.z]; }); return v; };
+window.ready = true;
+if (!location.search.includes('render')) { let t0 = performance.now(); const loop = () => { const f = ((performance.now() - t0) / 1000 * FPS) % 480; window.renderFrame(f); requestAnimationFrame(loop); }; loop(); }
+</script></body></html>

@@ -1,0 +1,6 @@
+phone_title      readable frames 218..269
+phone_body       readable frames 218..269
+laptop_headline  readable frames 170..194
+sign_word        readable frames 350..403
+violations: {'laptop_headline': 8}
+  e.g. [(170, 'laptop_headline', [755, 1887, 1114, 1940]), (171, 'laptop_headline', [722, 1826, 1084, 1877]), (172, 'laptop_headline', [690, 1765, 1054, 1813])]
