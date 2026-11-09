@@ -1,0 +1,28 @@
+== Streams
+nimble_tech_solutions_motion_reel_sound.mp4
+  video 1080x1920 h264 fps(r) 30/1, frames counted 450, video duration 15.000000 s, container duration 15.000000 s
+  audio streams: 1 aac 48000 Hz 2 ch, duration 15.000000 s
+  metadata tags left: {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso2avc1mp41', 'stream0:language': 'und', 'stream0:handler_name': 'VideoHandler', 'stream0:vendor_id': '[0][0][0][0]', 'stream1:language': 'und', 'stream1:handler_name': 'SoundHandler', 'stream1:vendor_id': '[0][0][0][0]'}
+nimble_tech_solutions_motion_reel_silent.mp4
+  video 1080x1920 h264 fps(r) 30/1, frames counted 450, video duration 15.000000 s, container duration 15.000000 s
+  audio streams: 0 
+  metadata tags left: {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso2avc1mp41', 'stream0:language': 'und', 'stream0:handler_name': 'VideoHandler', 'stream0:vendor_id': '[0][0][0][0]'}
+
+== Loudness and true peak measured on the finished MP4 audio track
+  integrated -13.8 LUFS, true peak -3.4 dBTP, LRA 1.6 LU
+
+== Sound to picture (onsets found in the decoded MP4 audio vs. the frame each sound is cued to)
+  decoded audio samples 720896 (15.0187 s)
+  word slam       cue frame   4 (0.133 s)  onset 0.083 s  offset -50 ms
+  wipe hit        cue frame  48 (1.600 s)  onset 1.578 s  offset -22 ms
+  service cut 2   cue frame 165 (5.500 s)  onset 5.498 s  offset -2 ms
+  service cut 4   cue frame 225 (7.500 s)  onset 7.462 s  offset -38 ms
+  pin drop        cue frame 237 (7.900 s)  onset 7.854 s  offset -46 ms
+  end card hit    cue frame 384 (12.800 s)  onset 12.751 s  offset -49 ms
+  whole track offset vs pre encode mix: +0 samples (+0.00 ms); every cue is placed at its exact frame in code
+
+== Tool names / provenance strings left in files
+  nimble_tech_solutions_motion_reel_poster.jpg            none found
+  nimble_tech_solutions_motion_reel_poster.png            none found
+  nimble_tech_solutions_motion_reel_silent.mp4            none found
+  nimble_tech_solutions_motion_reel_sound.mp4             none found
