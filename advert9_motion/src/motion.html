@@ -1,0 +1,274 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+:root{--teal:#115E67;--warm:#F7F5F0;--mist:#D9ECEC;--ink:#18282A;--apricot:#F2B66D}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--ink);font-family:"DejaVu Sans",sans-serif}
+.abs{position:absolute}
+#stage{position:absolute;inset:0;overflow:hidden}
+.layer{position:absolute;inset:0}
+.word{position:absolute;left:96px;font-weight:700;color:var(--warm);white-space:nowrap;overflow:hidden;line-height:1.08}
+.word span{display:inline-block}
+.bar{border-radius:8px;background:#d7dfde}
+.card{position:absolute;border-radius:28px;background:var(--warm);box-shadow:0 30px 60px rgba(0,0,0,.25)}
+.mono{font-family:"DejaVu Sans Mono",monospace}
+</style></head><body>
+<div id="stage">
+  <!-- angular pattern (approved decorative background) -->
+  <svg id="pattern" class="abs" width="1080" height="1920" style="left:0;top:0;opacity:.0">
+    <defs><pattern id="ang" width="180" height="180" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <path d="M0 0 L90 90 L0 180 M90 90 L180 0 M90 90 L180 180" stroke="#F7F5F0" stroke-opacity=".07" stroke-width="2" fill="none"/></pattern></defs>
+    <rect id="patrect" x="-400" y="-400" width="1880" height="2720" fill="url(#ang)"/>
+  </svg>
+
+  <!-- A: kinetic type -->
+  <div id="A" class="layer">
+    <div class="word" id="w1" style="top:580px;font-size:150px"><span>Your</span></div>
+    <div class="word" id="w2" style="top:760px;font-size:150px"><span>business<b style="color:var(--apricot)">,</b></span></div>
+    <div class="word" id="w3" style="top:940px;font-size:150px"><span>online</span></div>
+    <div id="ul" class="abs" style="left:96px;top:1130px;height:14px;width:0;background:var(--apricot);border-radius:7px"></div>
+  </div>
+  <div id="wipe" class="abs" style="width:120px;height:120px;border-radius:50%;background:var(--teal);left:0;top:0;transform:scale(0)"></div>
+
+  <!-- B: website builds itself -->
+  <div id="B" class="layer" style="opacity:0">
+    <svg id="frame" class="abs" style="left:110px;top:330px" width="780" height="980">
+      <rect id="frameRect" x="6" y="6" width="768" height="968" rx="44" fill="none" stroke="#F7F5F0" stroke-width="6" stroke-dasharray="3300" stroke-dashoffset="3300"/>
+    </svg>
+    <div id="site" class="abs" style="left:116px;top:336px;width:768px;height:968px;border-radius:40px;overflow:hidden">
+      <div id="siteBg" class="abs" style="inset:0;background:var(--warm);opacity:0"></div>
+      <div id="nav" class="abs" style="left:0;right:0;top:0;height:110px;background:#fff;display:flex;align-items:center;padding:0 40px;gap:20px">
+        <div style="font-family:P052;font-weight:700;font-size:34px;color:var(--teal)">Nimble</div>
+        <div style="margin-left:auto;display:flex;gap:16px"><i class="bar" style="width:70px;height:12px;display:block"></i><i class="bar" style="width:60px;height:12px;display:block"></i><i style="width:110px;height:40px;border-radius:20px;background:var(--apricot);display:block"></i></div>
+      </div>
+      <div id="hero" class="abs" style="left:32px;right:32px;top:140px;height:420px;border-radius:30px;background:var(--teal);overflow:hidden;padding:60px 46px">
+        <div id="heroText" style="font-weight:700;font-size:62px;line-height:1.1;color:var(--warm)"></div>
+        <div id="heroLine1" style="height:14px;border-radius:7px;background:rgba(247,245,240,.35);margin-top:30px;width:0"></div>
+        <div id="heroLine2" style="height:14px;border-radius:7px;background:rgba(247,245,240,.35);margin-top:16px;width:0"></div>
+        <div id="heroCta" style="width:200px;height:58px;border-radius:29px;background:var(--apricot);margin-top:34px;transform:scale(0)"></div>
+        <div style="position:absolute;right:-70px;top:-60px;width:300px;height:300px;border-radius:50%;background:rgba(217,236,236,.14)"></div>
+      </div>
+      <div id="blk1" class="card" style="left:32px;top:590px;width:340px;height:330px;box-shadow:none;background:#fff;padding:20px"><div style="height:150px;border-radius:16px;background:linear-gradient(135deg,var(--mist),#b9d8d9)"></div><i class="bar" style="display:block;height:16px;width:70%;margin:22px 0 14px;background:var(--teal)"></i><i class="bar" style="display:block;height:12px;width:90%"></i><i class="bar" style="display:block;height:12px;width:60%;margin-top:12px"></i></div>
+      <div id="blk2" class="card" style="left:396px;top:590px;width:340px;height:330px;box-shadow:none;background:#fff;padding:20px"><div style="height:150px;border-radius:16px;background:linear-gradient(135deg,#f6dcb3,var(--apricot))"></div><i class="bar" style="display:block;height:16px;width:70%;margin:22px 0 14px;background:var(--teal)"></i><i class="bar" style="display:block;height:12px;width:90%"></i><i class="bar" style="display:block;height:12px;width:60%;margin-top:12px"></i></div>
+    </div>
+  </div>
+
+  <!-- C: services montage -->
+  <div id="C" class="layer" style="opacity:0">
+    <div id="tickerMask" class="abs" style="left:96px;top:300px;width:808px;height:190px;overflow:hidden">
+      <div id="ticker" class="abs" style="left:0;top:0"></div>
+    </div>
+    <div id="tickIdx" class="abs mono" style="left:96px;top:250px;font-size:30px;color:var(--apricot);letter-spacing:4px"></div>
+    <div id="vign" class="abs" style="left:96px;top:560px;width:808px;height:880px"></div>
+  </div>
+
+  <!-- D: marquee grid -->
+  <div id="D" class="layer" style="opacity:0">
+    <div id="gridWrap" class="abs" style="left:-260px;top:-300px;width:1600px;height:2520px;transform-origin:800px 1260px"></div>
+    <div id="dShade" class="abs" style="inset:0;background:radial-gradient(60% 22% at 46% 47%,rgba(24,40,42,.78),rgba(24,40,42,0) 100%)"></div>
+    <div id="dWords" class="abs" style="left:96px;top:820px;width:808px"></div>
+  </div>
+  <div id="zoomTile" class="abs" style="background:var(--teal);border-radius:30px;opacity:0"></div>
+
+  <!-- E: end card -->
+  <div id="E" class="layer" style="opacity:0;background:var(--teal)">
+    <svg class="abs" width="1080" height="1920" style="left:0;top:0"><rect x="-400" y="-400" width="1880" height="2720" fill="url(#ang)" opacity=".9"/></svg>
+    <div id="logoWrap" class="abs" style="left:96px;width:808px;top:610px;text-align:center;overflow:hidden;height:330px">
+      <div id="logo" style="transform:translateY(330px)">
+        <div style="font-family:P052;font-weight:700;font-size:172px;color:#fff;line-height:1;letter-spacing:-1px">Nimble</div>
+        <div style="width:150px;height:12px;border-radius:6px;background:var(--apricot);margin:22px auto 18px"></div>
+        <div style="font-size:68px;color:#fff;letter-spacing:1px">Tech Solutions</div>
+      </div>
+    </div>
+    <div id="eTag" class="abs" style="left:96px;width:808px;top:1040px;text-align:center;font-size:46px;color:var(--warm);opacity:0">Websites and digital services</div>
+    <div id="eWa" class="abs" style="left:96px;width:808px;top:1128px;text-align:center;font-size:50px;font-weight:700;color:var(--apricot);opacity:0">WhatsApp 068 178 9708</div>
+    <div id="eArea" class="abs" style="left:96px;width:808px;top:1216px;text-align:center;font-size:40px;color:var(--mist);opacity:0">Midrand, Johannesburg, Remote</div>
+  </div>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+const C01 = v => Math.max(0, Math.min(1, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const eOut = t => 1 - Math.pow(1 - C01(t), 4);
+const eIO = t => { t = C01(t); return t < .5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2; };
+const eIn = t => Math.pow(C01(t), 3);
+// damped spring 0 -> 1 (overshoot)
+const spring = (t, k = 7, z = 0.55) => { if (t <= 0) return 0; const w = k, d = z; return 1 - Math.exp(-d * w * t) * Math.cos(w * Math.sqrt(1 - d * d) * t); };
+const sp = (f, f0, dur = 18, k = 9, z = 0.5) => spring(Math.max(0, (f - f0) / dur) * 3, k / 3 * 1, z);
+const seg = (f, a, b) => C01((f - a) / (b - a));
+const vis = (el, on) => el.style.display = on ? 'block' : 'none';
+
+// ---------- build services
+const SERV = ['Websites', 'Business email', 'Hosting', 'SEO', 'Video adverts'];
+const S0 = 135, SD = 30;
+$('ticker').innerHTML = SERV.map((s, i) => `<div style="position:absolute;left:0;top:${i * 190}px;height:190px;font-weight:700;font-size:${s.length > 10 ? 86 : 128}px;color:#F7F5F0;white-space:nowrap;line-height:190px">${[...s].map(c => `<span style="display:inline-block">${c === ' ' ? '&nbsp;' : c}</span>`).join('')}</div>`).join('');
+const V = $('vign');
+V.innerHTML = `
+<div id="v0" class="abs" style="inset:0">${[0, 1, 2].map(i => `<div class="card v0c" style="left:${254}px;top:${120}px;width:300px;height:560px;padding:18px;overflow:hidden">
+  <div style="height:36px;border-radius:10px;background:#fff;display:flex;align-items:center;padding:0 12px"><div style="width:50px;height:10px;border-radius:5px;background:${['#115E67', '#F2B66D', '#18282A'][i]}"></div></div>
+  <div style="height:200px;border-radius:16px;margin-top:14px;background:${['#115E67', 'linear-gradient(135deg,#f6dcb3,#F2B66D)', 'linear-gradient(135deg,#D9ECEC,#9cc9cb)'][i]}"></div>
+  <i class="bar" style="display:block;height:14px;width:80%;margin:20px 0 12px"></i><i class="bar" style="display:block;height:14px;width:60%"></i>
+  <div style="display:flex;gap:10px;margin-top:22px"><div style="flex:1;height:120px;border-radius:12px;background:#e6eceb"></div><div style="flex:1;height:120px;border-radius:12px;background:#e6eceb"></div></div></div>`).join('')}</div>
+<div id="v1" class="abs" style="inset:0">${['Website enquiry', 'Quote request', 'Booking question', 'Invoice'].map((s, i) => `<div class="card v1c" style="left:40px;width:728px;height:150px;top:${70 + i * 180}px;display:flex;align-items:center;gap:26px;padding:0 34px">
+  <div style="width:84px;height:84px;border-radius:24px;background:${i % 2 ? '#F2B66D' : '#115E67'};position:relative;flex:none"><div style="position:absolute;left:18px;top:24px;width:48px;height:36px;border:5px solid #F7F5F0;border-radius:6px"></div><div style="position:absolute;left:22px;top:26px;width:40px;height:22px;border-bottom:5px solid #F7F5F0;border-right:5px solid #F7F5F0;transform:skewY(30deg) rotate(45deg) scale(.6);transform-origin:center"></div></div>
+  <div style="flex:1"><div style="font-weight:700;font-size:34px;color:#18282A">${s}</div><i class="bar" style="display:block;height:14px;width:${80 - i * 10}%;margin-top:14px"></i></div>
+  <div class="dot" style="width:22px;height:22px;border-radius:50%;background:#F2B66D"></div></div>`).join('')}</div>
+<div id="v2" class="abs" style="inset:0">${[0, 1, 2].map(i => `<div class="card v2c" style="left:154px;width:500px;height:150px;top:${110 + i * 175}px;background:#18282A;display:flex;align-items:center;gap:20px;padding:0 36px">
+  ${[0, 1, 2].map(j => `<div class="led" style="width:24px;height:24px;border-radius:50%;background:#2a4446"></div>`).join('')}
+  <div style="margin-left:auto;display:flex;flex-direction:column;gap:12px">${[0, 1, 2].map(() => `<i style="display:block;width:150px;height:10px;border-radius:5px;background:#2f4a4c"></i>`).join('')}</div></div>`).join('')}
+  <svg class="abs" style="left:40px;top:690px" width="728" height="170"><path id="pulse" d="M0 85 H220 L250 30 L290 150 L330 10 L370 120 L400 85 H728" fill="none" stroke="#F2B66D" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1400" stroke-dashoffset="1400"/></svg>
+  <div id="lock" class="abs" style="left:614px;top:40px;width:120px;height:120px;border-radius:30px;background:#F2B66D;transform:scale(0)"><div style="position:absolute;left:34px;top:22px;width:52px;height:44px;border:9px solid #18282A;border-bottom:none;border-radius:26px 26px 0 0"></div><div style="position:absolute;left:26px;top:56px;width:68px;height:46px;border-radius:10px;background:#18282A"></div></div></div>
+<div id="v3" class="abs" style="inset:0">
+  <div class="card" id="map" style="left:40px;top:40px;width:728px;height:620px;overflow:hidden;background:#e9ece4">
+    <svg width="728" height="620"><g id="roads" fill="none" stroke="#fff" stroke-linecap="round">
+      <path d="M-20 420 C200 380 360 470 760 360" stroke-width="34"/><path d="M-20 420 C200 380 360 470 760 360" stroke="#F2B66D" stroke-width="16"/>
+      <path d="M240 -20 C260 200 300 380 280 660" stroke-width="22"/><path d="M560 -20 L470 660" stroke-width="18"/><path d="M-20 160 L760 110" stroke-width="14"/>
+      <path d="M100 -20 L170 660 M660 -20 L720 660 M-20 560 L760 540" stroke-width="9"/></g>
+      <rect x="560" y="170" width="140" height="90" rx="14" fill="#d3e5cb"/><rect x="40" y="200" width="110" height="80" rx="12" fill="#d3e5cb"/>
+      <text x="300" y="250" font-family="DejaVu Sans" font-weight="700" font-size="26" fill="#8a9590" letter-spacing="4">MIDRAND</text></svg>
+    <div id="pinWrap" class="abs" style="left:364px;top:250px;width:0;height:0">
+      <div id="ring" class="abs" style="left:-60px;top:-60px;width:120px;height:120px;border-radius:50%;border:6px solid #115E67;opacity:0"></div>
+      <svg id="pin" class="abs" style="left:-36px;top:-96px" width="72" height="96" viewBox="0 0 44 58"><path d="M22 2C11 2 3 10 3 21c0 14 19 32 19 32s19-18 19-32C41 10 33 2 22 2z" fill="#115E67" stroke="#fff" stroke-width="3"/><circle cx="22" cy="21" r="7" fill="#F2B66D"/></svg>
+    </div>
+  </div>
+  <div class="card" id="sbar" style="left:40px;top:700px;width:728px;height:120px;display:flex;align-items:center;padding:0 36px;gap:22px">
+    <div style="width:38px;height:38px;border:6px solid #18282A;border-radius:50%;position:relative;flex:none"><div style="position:absolute;width:18px;height:6px;background:#18282A;right:-16px;bottom:-8px;transform:rotate(45deg)"></div></div>
+    <div id="query" style="font-size:40px;color:#18282A"></div></div></div>
+<div id="v4" class="abs" style="inset:0">
+  <div class="card" id="vphone" style="left:224px;top:20px;width:360px;height:640px;background:#18282A;padding:16px">
+    <div style="position:absolute;inset:16px;border-radius:20px;background:linear-gradient(160deg,#115E67,#0b3a40);overflow:hidden">
+      <div id="vfill" class="abs" style="left:0;bottom:0;width:100%;height:0;background:rgba(242,182,109,.25)"></div>
+      <svg id="play" class="abs" style="left:110px;top:240px" width="110" height="110" viewBox="0 0 110 110"><circle cx="55" cy="55" r="52" fill="#F7F5F0"/><path id="playPath" d="M44 32 L80 55 L44 78 Z" fill="#115E67"/></svg>
+    </div></div>
+  <div class="card" style="left:40px;top:700px;width:728px;height:120px;padding:0 36px;display:flex;align-items:center;gap:22px">
+    <div style="flex:1;height:14px;border-radius:7px;background:#dfe6e5;position:relative"><div id="scrub" style="position:absolute;left:0;top:0;height:14px;border-radius:7px;background:#115E67;width:0"></div><div id="knob" style="position:absolute;top:-11px;left:0;width:36px;height:36px;border-radius:50%;background:#F2B66D;margin-left:-18px"></div></div>
+    <div class="mono" style="font-size:30px;color:#18282A">0:16</div></div>
+  <div id="film" class="abs" style="left:-200px;top:860px;width:1400px;height:60px;display:flex;gap:16px">${Array.from({ length: 16 }).map((_, i) => `<div style="width:70px;height:60px;border-radius:10px;background:${i % 3 ? '#D9ECEC' : '#F2B66D'};opacity:.6"></div>`).join('')}</div></div>`;
+
+// ---------- marquee grid tiles
+const tileHTML = i => {
+  const k = i % 6, base = 'position:absolute;inset:16px;border-radius:22px;';
+  const kinds = [
+    `<div style="${base}background:#F7F5F0;padding:20px"><div style="height:44%;border-radius:14px;background:#115E67"></div><i class="bar" style="display:block;height:14px;width:70%;margin-top:18px"></i><i class="bar" style="display:block;height:14px;width:50%;margin-top:12px"></i></div>`,
+    `<div style="${base}background:#115E67;display:flex;align-items:center;justify-content:center"><div style="width:44%;height:32%;border:8px solid #F7F5F0;border-radius:10px"></div></div>`,
+    `<div style="${base}background:#18282A;padding:26px;display:flex;flex-direction:column;gap:16px">${[0, 1, 2].map(j => `<div style="height:22%;border-radius:10px;background:#2a4446;display:flex;align-items:center;padding-left:16px"><div style="width:16px;height:16px;border-radius:50%;background:${j == 1 ? '#F2B66D' : '#4f8d8f'}"></div></div>`).join('')}</div>`,
+    `<div style="${base}background:#e9ece4;overflow:hidden"><div style="position:absolute;left:-10%;top:58%;width:120%;height:14px;background:#F2B66D;transform:rotate(-8deg)"></div><svg style="position:absolute;left:38%;top:24%" width="60" height="80" viewBox="0 0 44 58"><path d="M22 2C11 2 3 10 3 21c0 14 19 32 19 32s19-18 19-32C41 10 33 2 22 2z" fill="#115E67"/><circle cx="22" cy="21" r="7" fill="#F2B66D"/></svg></div>`,
+    `<div style="${base}background:#F2B66D;display:flex;align-items:center;justify-content:center"><svg width="90" height="90" viewBox="0 0 110 110"><circle cx="55" cy="55" r="52" fill="#18282A"/><path d="M44 32 L80 55 L44 78 Z" fill="#F7F5F0"/></svg></div>`,
+    `<div style="${base}background:#D9ECEC;padding:24px"><div style="height:40px;border-radius:20px;background:#fff"></div><div style="height:30%;border-radius:14px;background:#fff;margin-top:16px"></div><div style="height:30%;border-radius:14px;background:#115E67;margin-top:12px"></div></div>`];
+  return kinds[k];
+};
+const COLS = 5, ROWS = 9, TW = 320, TH = 280;
+let g = '';
+for (let c = 0; c < COLS; c++) {
+  g += `<div class="gcol" style="position:absolute;left:${c * TW}px;top:0;width:${TW}px;height:${ROWS * TH * 2}px">`;
+  for (let r = 0; r < ROWS * 2; r++) g += `<div style="position:absolute;left:0;top:${r * TH}px;width:${TW}px;height:${TH}px">${tileHTML(c * 7 + r * 3)}</div>`;
+  g += `</div>`;
+}
+$('gridWrap').innerHTML = g;
+const DW = ['Websites', 'Email', 'Hosting', 'SEO', 'Video'];
+$('dWords').innerHTML = DW.map((w, i) => `<div class="dw" style="position:absolute;left:0;width:808px;text-align:center;font-weight:700;font-size:124px;color:#F7F5F0;text-shadow:0 10px 40px rgba(0,0,0,.45);opacity:0">${w}</div>`).join('');
+
+// ---------- the timeline: render(f) sets every property for frame f (fractional frames allowed)
+window.render = function (f) {
+  // background colour story: ink -> teal (wipe) -> ink (C) -> grid -> teal end
+  const pat = $('pattern'); pat.style.opacity = f > 40 && f < 380 ? 1 : 0;
+  $('patrect').setAttribute('transform', `translate(${(f * 1.2) % 180},${(f * 0.6) % 180})`);
+
+  // ---- A: words rise through masks with a springy overshoot, then the "o" opens into teal
+  const A = $('A'); vis(A, f < 52);
+  [['w1', 4], ['w2', 10], ['w3', 16]].forEach(([id, f0], i) => {
+    const s = $(id).firstElementChild; const p = sp(f, f0, 14, 9, 0.55);
+    const out = eIn(seg(f, 34 + i * 2, 46 + i * 2));
+    s.style.transform = `translateY(${(1 - p) * 110 + out * -120}%) skewY(${(1 - C01(p)) * 6}deg)`;
+  });
+  $('ul').style.width = `${eOut(seg(f, 20, 32)) * 520 * (1 - eIn(seg(f, 36, 44)))}px`;
+  const wipe = $('wipe'); const ws = eIO(seg(f, 38, 54)) * 40;
+  wipe.style.left = `${96 + 300}px`; wipe.style.top = `${1030}px`; wipe.style.transform = `translate(-50%,-50%) scale(${ws})`;
+  wipe.style.display = f < 136 ? 'block' : 'none';
+  document.body.style.background = f < 136 ? '#18282A' : '#18282A';
+
+  // ---- B: frame draws, the site assembles, the mock swings in 3D and leaves
+  const B = $('B'); vis(B, f >= 44 && f < 140); B.style.opacity = 1;
+  $('frameRect').setAttribute('stroke-dashoffset', 3300 * (1 - eIO(seg(f, 46, 62))));
+  $('siteBg').style.opacity = eOut(seg(f, 58, 64));
+  const nav = $('nav'); nav.style.transform = `translateY(${(1 - sp(f, 60, 12)) * -120}px)`;
+  const hero = $('hero'); const hp = sp(f, 64, 14, 9, 0.6); hero.style.transform = `scaleX(${C01(hp) * 0.98 + 0.02 * C01(hp)}) scaleY(${0.3 + 0.7 * C01(hp)})`; hero.style.transformOrigin = 'left center'; hero.style.opacity = C01((f - 64) * 0.5);
+  const txt = 'Your business, online'; const nshow = Math.floor(C01((f - 70) / 16) * txt.length);
+  let ci = 0;
+  $('heroText').innerHTML = txt.split(' ').map(w => `<span style="display:inline-block;white-space:nowrap">${[...w].map(c => {
+    const pp = sp(f, 70 + (ci++) * 0.75, 10, 10, 0.55);
+    return `<span style="display:inline-block;transform:translateY(${(1 - pp) * 40}px);opacity:${C01(pp * 2)}">${c}</span>`;
+  }).join('')}</span>`).join(' ');
+  $('heroLine1').style.width = `${eOut(seg(f, 84, 94)) * 420}px`; $('heroLine2').style.width = `${eOut(seg(f, 87, 97)) * 300}px`;
+  $('heroCta').style.transform = `scale(${sp(f, 90, 12, 10, 0.45)})`;
+  ['blk1', 'blk2'].forEach((id, i) => { const p = sp(f, 88 + i * 5, 14, 9, 0.5); $(id).style.transform = `translateY(${(1 - p) * 220}px) scale(${0.85 + 0.15 * C01(p)})`; $(id).style.opacity = C01(p * 2); });
+  const tilt = eIO(seg(f, 104, 120)), leave = eIn(seg(f, 120, 136));
+  const site = $('site'), frame = $('frame');
+  const tf = `perspective(1800px) translateY(${leave * -1400}px) rotateX(${tilt * 14 + leave * 30}deg) rotateY(${tilt * -20}deg) rotateZ(${tilt * 4}deg) scale(${1 - tilt * 0.12})`;
+  site.style.transform = tf; frame.style.transform = tf; site.style.transformOrigin = frame.style.transformOrigin = '390px 490px';
+
+  // ---- C: a vertical ticker of services with a UI vignette for each, cut on the beat
+  const Cl = $('C'); vis(Cl, f >= 126 && f < 296); Cl.style.opacity = C01((f - 126) / 6);
+  const idx = Math.max(0, Math.min(SERV.length - 1, Math.floor((f - S0) / SD)));
+  const local = f - S0 - idx * SD;
+  let ty = 0;
+  for (let i = 0; i < SERV.length; i++) { const p = eIO(seg(f, S0 + i * SD - 6, S0 + i * SD + 4)); ty = lerp(ty, -i * 190, p); }
+  $('ticker').style.transform = `translateY(${f < S0 - 6 ? 190 : ty}px)`;
+  $('tickIdx').textContent = `0${idx + 1} / 05`;
+  [...$('ticker').children].forEach((row, i) => [...row.children].forEach((ch, j) => {
+    const p = sp(f, S0 + i * SD - 6 + j * 0.8, 10, 10, 0.5); ch.style.transform = `translateY(${(1 - p) * 70}px) rotate(${(1 - C01(p)) * 8}deg)`;
+  }));
+  for (let i = 0; i < 5; i++) {
+    const el = $('v' + i); const a = S0 + i * SD, b = a + SD;
+    const on = f >= a - 4 && f < b + 2; el.style.display = on ? 'block' : 'none';
+    const out = eIn(seg(f, b - 4, b + 2)); el.style.transform = `translateX(${out * -900}px) rotate(${out * -6}deg)`;
+  }
+  // v0 websites: three pages fan out
+  document.querySelectorAll('.v0c').forEach((el, i) => {
+    const p = sp(f, S0 + 2 + i * 2, 14, 9, 0.55); const ang = (i - 1) * 14 * C01(p), dx = (i - 1) * 230 * C01(p);
+    el.style.transform = `translateX(${dx}px) translateY(${(1 - C01(p)) * 300 + Math.abs(i - 1) * 40}px) rotate(${ang}deg)`; el.style.zIndex = i === 1 ? 3 : 1;
+  });
+  // v1 email: messages slide in and stack, dots pop
+  document.querySelectorAll('.v1c').forEach((el, i) => { const p = sp(f, S0 + SD + 2 + i * 3, 12, 9, 0.6); el.style.transform = `translateX(${(1 - p) * 820}px)`; el.querySelector('.dot').style.transform = `scale(${sp(f, S0 + SD + 10 + i * 3, 10, 12, 0.4)})`; });
+  // v2 hosting: servers rise, LEDs blink, pulse line draws, lock pops
+  document.querySelectorAll('.v2c').forEach((el, i) => { const p = sp(f, S0 + 2 * SD + 1 + i * 3, 12, 9, 0.6); el.style.transform = `translateY(${(1 - p) * 500}px)`; });
+  document.querySelectorAll('.led').forEach((el, i) => { const on = Math.floor((f + i * 7) / 5) % 3 !== 0 && f > S0 + 2 * SD + 8; el.style.background = on ? (i % 3 === 1 ? '#F2B66D' : '#5fc3a0') : '#2a4446'; });
+  $('pulse').setAttribute('stroke-dashoffset', 1400 * (1 - eIO(seg(f, S0 + 2 * SD + 8, S0 + 2 * SD + 24))));
+  $('lock').style.transform = `scale(${sp(f, S0 + 2 * SD + 14, 12, 12, 0.4)})`;
+  // v3 SEO: query types, the pin drops onto the map with a ripple
+  const q = 'web design Midrand'; const qn = Math.floor(C01((f - S0 - 3 * SD - 1) / 12) * q.length);
+  $('query').innerHTML = q.slice(0, qn) + (Math.floor(f / 4) % 2 ? '<span style="color:#115E67">|</span>' : '&nbsp;');
+  $('map').style.transform = `scale(${0.9 + 0.1 * sp(f, S0 + 3 * SD, 12, 8, 0.6)})`;
+  const pd = sp(f, S0 + 3 * SD + 12, 12, 11, 0.4); $('pin').style.transform = `translateY(${(1 - pd) * -400}px)`;
+  const rp = seg(f, S0 + 3 * SD + 16, S0 + 3 * SD + 30); $('ring').style.opacity = (1 - rp) * (rp > 0 ? 1 : 0); $('ring').style.transform = `scale(${0.3 + rp * 2.2})`;
+  // v4 video: play morphs to pause, the scrubber runs, film strip slides
+  const vp = sp(f, S0 + 4 * SD, 12, 9, 0.6); $('vphone').style.transform = `translateY(${(1 - vp) * 600}px) rotate(${(1 - C01(vp)) * -10}deg)`;
+  const pm = eIO(seg(f, S0 + 4 * SD + 10, S0 + 4 * SD + 16));
+  $('playPath').setAttribute('d', pm < 0.5 ? `M44 32 L80 55 L44 78 Z` : `M38 32 H50 V78 H38 Z M60 32 H72 V78 H60 Z`);
+  const sc = eIO(seg(f, S0 + 4 * SD + 8, S0 + 4 * SD + 30)); $('scrub').style.width = `${sc * 100}%`; $('knob').style.left = `${sc * 100}%`;
+  $('vfill').style.height = `${sc * 100}%`; $('film').style.transform = `translateX(${-(f - S0 - 4 * SD) * 9}px)`;
+
+  // ---- D: tilted marquee grid, columns run in opposite directions, words punch on the beat
+  const D = $('D'); vis(D, f >= 284 && f < 392); D.style.opacity = C01((f - 284) / 6);
+  const gw = $('gridWrap'); const gz = eIO(seg(f, 352, 382));
+  gw.style.transform = `perspective(2400px) rotateX(${28 - gz * 28}deg) rotateZ(${-18 + gz * 18}deg) scale(${1 + gz * 3.2})`;
+  document.querySelectorAll('.gcol').forEach((c, i) => { const dir = i % 2 ? 1 : -1; c.style.transform = `translateY(${(-ROWS * TH / 2) + dir * ((f - 284) * 7 + i * 60) % (ROWS * TH)}px)`; });
+  $('dShade').style.opacity = f < 352 ? 1 : 1 - eIO(seg(f, 352, 362));
+  document.querySelectorAll('.dw').forEach((w, i) => {
+    const a = 290 + i * 12; const p = sp(f, a, 8, 12, 0.5), o = seg(f, a + 10, a + 12);
+    w.style.opacity = C01(p * 3) * (1 - o) * (f < 352 ? 1 : 0); w.style.transform = `scale(${0.6 + 0.4 * C01(p) + (p > 1 ? (p - 1) * 0.6 : 0)}) translateY(${(1 - C01(p)) * 40}px)`;
+  });
+  // the centre of the grid opens into the teal end card
+  const zt = $('zoomTile'); const zp = eIO(seg(f, 360, 384));
+  zt.style.opacity = f >= 356 && f < 392 ? C01((f - 356) / 4) : 0;
+  const zw = lerp(240, 1600, zp), zh = lerp(210, 2600, zp);
+  zt.style.width = zw + 'px'; zt.style.height = zh + 'px'; zt.style.left = (500 - zw / 2) + 'px'; zt.style.top = (900 - zh / 2) + 'px'; zt.style.borderRadius = lerp(30, 0, zp) + 'px';
+
+  // ---- E: end card, everything settles and holds still
+  const E = $('E'); vis(E, f >= 380); E.style.opacity = C01((f - 380) / 4);
+  const lp = sp(f, 384, 16, 8, 0.65); $('logo').style.transform = `translateY(${(1 - Math.min(lp, 1.04)) * 330}px)`;
+  if (f >= 404) $('logo').style.transform = 'translateY(0px)';
+  [['eTag', 392], ['eWa', 398], ['eArea', 404]].forEach(([id, a]) => { const p = eOut(seg(f, a, a + 8)); $(id).style.opacity = p; $(id).style.transform = `translateY(${(1 - p) * 24}px)`; });
+};
+render(0);
+</script></body></html>
