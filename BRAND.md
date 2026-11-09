@@ -43,6 +43,8 @@ Audience: small business owners in greater Johannesburg, Midrand base, plus remo
 | 6 | WhatsApp "message to browse" | Remotion |
 | 7 | Shop opens | Blender, `advert7v2/` (photoreal desk version kept in `advert7/`) |
 | 8 | Open all hours | Blender, `advert8/` (overlaps the angle of advert 3) |
+| 9 | Motion reel | product UI and kinetic type, `advert9_motion/` |
+| 10 | November pricing | pricing showreel, `advert10_pricing/` |
 
 ## Current prices (for pricing adverts only)
 November 2026 promotion, valid until 30 November 2026 (struck through price, then promotional price):
@@ -51,6 +53,3 @@ Online shop website from R15 000 to R12 500; Business email setup (up to 3 mailb
 Local SEO starter R2 500 to R1 999 per month; Video advert (16 s) R2 500 to R1 950; Video advert pack (3) R6 500 to R5 500.
 Not on promotion: Website hosting R149.99 per month, business email included; Email hosting (email only,
 up to 3 mailboxes) R129 per month. Domain billed separately. VAT status still to be confirmed.
-
-| 9 | Motion reel | product UI and kinetic type, `advert9_motion/` |
-| 10 | November pricing | pricing showreel, `advert10_pricing/` |
