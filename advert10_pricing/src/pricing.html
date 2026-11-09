@@ -1,0 +1,196 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+:root{--teal:#115E67;--warm:#F7F5F0;--mist:#D9ECEC;--ink:#18282A;--apricot:#F2B66D}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--ink);font-family:"DejaVu Sans",sans-serif}
+.abs{position:absolute}
+.layer{position:absolute;inset:0}
+.card{position:absolute;left:96px;width:808px;border-radius:30px;background:var(--warm);padding:26px 32px;box-shadow:0 24px 50px rgba(0,0,0,.28)}
+.nm{font-weight:700;font-size:44px;color:var(--ink);white-space:nowrap}
+.dt{font-size:30px;color:#55686a;margin-top:6px;white-space:nowrap}
+.old{position:absolute;right:32px;top:28px;font-size:34px;color:#7b8a8b;white-space:nowrap}
+.old i{position:absolute;left:-4px;top:52%;height:4px;background:#c0392b;border-radius:2px;width:0}
+.new{position:absolute;right:32px;top:74px;font-weight:700;font-size:74px;color:var(--teal);white-space:nowrap}
+.unit{font-size:26px;font-weight:400;color:#55686a}
+.track{position:absolute;left:32px;right:32px;bottom:26px;height:16px;border-radius:7px;background:#e3e9e8;overflow:hidden}
+.bOld{position:absolute;left:0;top:0;height:14px;border-radius:7px;background:#b8cfd0}
+.bNew{position:absolute;left:0;top:0;height:14px;border-radius:7px;background:var(--apricot)}
+.hdr{position:absolute;left:96px;width:808px;font-weight:700;color:var(--warm);white-space:nowrap;overflow:hidden}
+.hdr span{display:inline-block}
+.idx{position:absolute;left:96px;font-family:"DejaVu Sans Mono",monospace;font-size:30px;letter-spacing:4px;color:var(--apricot)}
+.compact .nm{font-size:40px}.compact .dt{font-size:28px}.compact .old{top:22px;font-size:30px}.compact .new{top:54px !important;font-size:60px !important}
+.compact .track{bottom:18px;height:12px}.compact .track div{height:12px}
+.per{position:absolute;right:32px;top:128px;font-size:24px;color:#55686a}
+.note{position:absolute;left:96px;width:808px;font-size:28px;color:var(--mist);opacity:.85}
+</style></head><body>
+<svg class="abs" width="1080" height="1920" style="left:0;top:0">
+  <defs><pattern id="ang" width="180" height="180" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+    <path d="M0 0 L90 90 L0 180 M90 90 L180 0 M90 90 L180 180" stroke="#F7F5F0" stroke-opacity=".06" stroke-width="2" fill="none"/></pattern></defs>
+  <rect id="patrect" x="-400" y="-400" width="1880" height="2720" fill="url(#ang)"/>
+</svg>
+<div id="shapes" class="layer"></div>
+
+<!-- intro -->
+<div id="I" class="layer">
+  <div class="hdr" id="i1" style="top:580px;font-size:112px;height:140px"><span>Promotional</span></div>
+  <div class="hdr" id="i2" style="top:720px;font-size:112px;height:140px"><span>prices</span></div>
+  <div id="pill" class="abs" style="left:96px;top:900px;height:96px;border-radius:48px;background:var(--apricot);display:flex;align-items:center;padding:0 40px;font-weight:700;font-size:46px;color:var(--ink);white-space:nowrap;transform-origin:left center">until 30 November</div>
+</div>
+
+<!-- price scenes -->
+<div id="P" class="layer"></div>
+
+<!-- finale -->
+<div id="F" class="layer">
+  <div id="fGrid" class="abs" style="left:0;top:0;width:1080px;height:1920px"></div>
+  <div id="fShade" class="abs" style="inset:0;background:radial-gradient(62% 26% at 46% 50%,rgba(24,40,42,.85),rgba(24,40,42,0) 100%)"></div>
+  <div id="fWord" class="abs" style="left:96px;width:808px;top:700px;text-align:center"></div>
+</div>
+
+<!-- end card -->
+<div id="E" class="layer" style="background:var(--teal)">
+  <svg class="abs" width="1080" height="1920" style="left:0;top:0"><rect x="-400" y="-400" width="1880" height="2720" fill="url(#ang)"/></svg>
+  <div id="logoWrap" class="abs" style="left:96px;width:808px;top:520px;text-align:center;overflow:hidden;height:330px">
+    <div id="logo" style="transform:translateY(330px)">
+      <div style="font-family:P052;font-weight:700;font-size:172px;color:#fff;line-height:1;letter-spacing:-1px">Nimble</div>
+      <div style="width:150px;height:12px;border-radius:6px;background:var(--apricot);margin:22px auto 18px"></div>
+      <div style="font-size:68px;color:#fff;letter-spacing:1px">Tech Solutions</div>
+    </div>
+  </div>
+  <div id="ePromo" class="abs" style="left:96px;width:808px;top:930px;text-align:center;opacity:0"><span style="display:inline-block;background:var(--apricot);color:var(--ink);font-weight:700;font-size:33px;border-radius:40px;padding:16px 34px;white-space:nowrap">Promotional prices until 30 November</span></div>
+  <div id="eWa" class="abs" style="left:96px;width:808px;top:1070px;text-align:center;font-size:52px;font-weight:700;color:var(--warm);opacity:0">WhatsApp 068 178 9708</div>
+  <div id="eArea" class="abs" style="left:96px;width:808px;top:1160px;text-align:center;font-size:40px;color:var(--mist);opacity:0">Midrand, Johannesburg, Remote</div>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+const C01 = v => Math.max(0, Math.min(1, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const eOut = t => 1 - Math.pow(1 - C01(t), 4);
+const eIO = t => { t = C01(t); return t < .5 ? 8 * t ** 4 : 1 - Math.pow(-2 * t + 2, 4) / 2; };
+const eIn = t => Math.pow(C01(t), 3);
+const spring = (t, k, z) => t <= 0 ? 0 : 1 - Math.exp(-z * k * t) * Math.cos(k * Math.sqrt(1 - z * z) * t);
+const sp = (f, f0, dur = 14, k = 9, z = 0.5) => spring(Math.max(0, (f - f0) / dur) * 3, k / 3, z);
+const seg = (f, a, b) => C01((f - a) / (b - a));
+const show = (el, on) => el.style.display = on ? 'block' : 'none';
+const rand = (s => () => (s = (s * 16807) % 2147483647) / 2147483647)(42);
+const fmt = (v, cents) => cents ? 'R' + v.toFixed(2) : 'R' + Math.round(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+// ---------- data (promotional prices valid until 30 November)
+const SCENES = [
+  { idx: '01', title: 'Websites', a: 60, b: 165, note: 'Domain billed separately', items: [
+    { n: 'Starter website', d: 'One page', o: 3500, p: 2950 },
+    { n: 'Business website', d: 'Up to 5 pages', o: 8500, p: 6999 },
+    { n: 'Online shop website', d: 'Starting price', o: 15000, p: 12500, from: true }] },
+  { idx: '02', title: 'Email, hosting, SEO', a: 165, b: 255, compact: true, items: [
+    { n: 'Business email setup', d: 'Up to 3 mailboxes', o: 450, p: 350 },
+    { n: 'Website hosting', d: 'Business email included', o: null, p: 149.99, cents: true, per: true },
+    { n: 'Email hosting', d: 'Email only, up to 3 mailboxes', o: null, p: 129, per: true },
+    { n: 'Local SEO starter', d: 'Monthly service', o: 2500, p: 1999, per: true }] },
+  { idx: '03', title: 'Video adverts', a: 255, b: 333, items: [
+    { n: 'Video advert', d: '16 seconds', o: 2500, p: 1950 },
+    { n: 'Video advert pack', d: 'Three adverts', o: 6500, p: 5500 }] },
+];
+const CARD_H = 236, CARD_GAP = 28, TOP0 = 560, CH_C = 204, CG_C = 22;
+$('P').innerHTML = SCENES.map((s, si) => `<div class="layer" id="s${si}">
+  <div class="idx" style="top:300px">${s.idx} / 03</div>
+  <div class="hdr" style="top:350px;font-size:${s.title.length > 12 ? 64 : 120}px;height:150px;line-height:150px">${[...s.title].map(c => `<span>${c === ' ' ? '&nbsp;' : c}</span>`).join('')}</div>
+  ${s.items.map((it, i) => `<div class="card${s.compact ? ' compact' : ''}" id="c${si}_${i}" style="top:${TOP0 + i * ((s.compact ? CH_C : CARD_H) + (s.compact ? CG_C : CARD_GAP))}px;height:${s.compact ? CH_C : CARD_H}px">
+     <div class="nm">${it.n}</div><div class="dt">${it.d}</div>
+     ${it.o ? `<div class="old"><span>${fmt(it.o)}</span><i></i></div>` : ''}
+     <div class="new" style="${it.o ? '' : 'top:62px;font-size:62px'}">${it.from ? '<span class="unit">from </span>' : ''}<span class="num">${fmt(it.p, it.cents)}</span>${it.unit ? `<span class="unit">${it.unit}</span>` : ''}</div>${it.per ? '<div class="per">per month</div>' : ''}
+     <div class="track"><div class="bOld"></div><div class="bNew"></div></div></div>`).join('')}
+  ${s.note ? `<div class="note" style="top:${TOP0 + s.items.length * (CARD_H + CARD_GAP) + 6}px">${s.note}</div>` : ''}
+</div>`).join('');
+
+// ---------- shapes for the intro burst and the finale
+const SH = [];
+for (let i = 0; i < 26; i++) SH.push({ a: rand() * Math.PI * 2, r: 300 + rand() * 700, s: 24 + rand() * 70, k: Math.floor(rand() * 3), c: ['#F2B66D', '#D9ECEC', '#115E67', '#F7F5F0'][Math.floor(rand() * 4)], rot: rand() * 360, spin: (rand() - .5) * 8 });
+$('shapes').innerHTML = SH.map((s, i) => `<div class="abs sh" style="width:${s.s}px;height:${s.s}px;left:${-s.s / 2}px;top:${-s.s / 2}px;${s.k === 0 ? 'border-radius:50%;' : s.k === 1 ? `border-radius:${s.s * .22}px;` : ''}${s.k === 2 ? `background:none;border-left:${s.s / 2}px solid transparent;border-right:${s.s / 2}px solid transparent;border-bottom:${s.s * .86}px solid ${s.c};width:0;height:0;` : `background:${s.c};`}opacity:0"></div>`).join('');
+
+// finale grid: all promotional prices as tiles
+const ALL = SCENES.flatMap(s => s.items.map(it => fmt(it.p, it.cents)));
+let fg = '';
+for (let i = 0; i < 24; i++) {
+  const col = i % 3, row = Math.floor(i / 3);
+  fg += `<div class="abs ft" style="left:${60 + col * 330}px;top:${row * 260 - 120}px;width:300px;height:220px;border-radius:26px;background:${['#115E67', '#F7F5F0', '#F2B66D', '#D9ECEC'][(i + row) % 4]};display:flex;align-items:center;justify-content:center;font-weight:700;font-size:54px;color:${(i + row) % 4 === 0 ? '#F7F5F0' : '#18282A'}">${ALL[i % ALL.length]}</div>`;
+}
+$('fGrid').innerHTML = fg;
+$('fWord').innerHTML = ['Until', '30', 'November'].map(w => `<div class="fw" style="font-weight:700;font-size:${w === '30' ? 300 : 130}px;line-height:1.05;color:#F7F5F0;text-shadow:0 12px 40px rgba(0,0,0,.5);opacity:0">${w}</div>`).join('');
+
+window.render = function (f) {
+  $('patrect').setAttribute('transform', `translate(${(f * 1.4) % 180},${(f * 0.7) % 180})`);
+
+  // ---- intro: words slam through masks, pill stamps in, shapes burst from the pill
+  show($('I'), f < 66);
+  [['i1', 3], ['i2', 9]].forEach(([id, a], i) => {
+    const s = $(id).firstElementChild, p = sp(f, a, 12, 10, 0.5), o = eIn(seg(f, 50 + i * 2, 62 + i * 2));
+    s.style.transform = `translateY(${(1 - p) * 110 - o * 120}%) skewY(${(1 - C01(p)) * 7}deg)`;
+  });
+  const pp = sp(f, 18, 12, 12, 0.4), po = eIn(seg(f, 52, 62));
+  $('pill').style.transform = `scale(${pp * (1 - po)}) rotate(${(1 - C01(pp)) * -8}deg)`;
+  // shapes: burst at the stamp, return for the finale explosion
+  document.querySelectorAll('.sh').forEach((el, i) => {
+    const s = SH[i];
+    const b1 = eOut(seg(f, 20, 44)), fade1 = 1 - seg(f, 40, 58);
+    const b2 = eOut(seg(f, 338, 372)), fade2 = 1 - seg(f, 372, 392);
+    let x, y, o, sc;
+    if (f < 120) { x = 330 + Math.cos(s.a) * s.r * b1; y = 980 + Math.sin(s.a) * s.r * b1 * 1.3; o = b1 > 0 ? fade1 : 0; sc = b1; }
+    else { x = 500 + Math.cos(s.a) * s.r * 1.2 * b2; y = 900 + Math.sin(s.a) * s.r * 1.6 * b2; o = b2 > 0 ? fade2 : 0; sc = 0.5 + b2; }
+    el.style.opacity = o; el.style.transform = `translate(${x}px,${y}px) rotate(${s.rot + f * s.spin}deg) scale(${sc})`;
+  });
+
+  // ---- price scenes
+  SCENES.forEach((s, si) => {
+    const L = $('s' + si); const on = f >= s.a - 2 && f < s.b + 6; show(L, on); if (!on) return;
+    const out = eIn(seg(f, s.b - 4, s.b + 6));
+    L.style.transform = `translateX(${out * -1100}px)`; L.style.opacity = 1;
+    const hdr = L.querySelector('.hdr'); [...hdr.children].forEach((c, j) => { const p = sp(f, s.a + j * 0.8, 10, 10, 0.5); c.style.transform = `translateY(${(1 - p) * 110}%)`; });
+    L.querySelector('.idx').style.opacity = seg(f, s.a, s.a + 6);
+    const mx = Math.max(...s.items.map(it => it.o || it.p));
+    s.items.forEach((it, i) => {
+      const c = $(`c${si}_${i}`), a = s.a + 6 + i * 6;
+      const p = sp(f, a, 14, 9, 0.55); c.style.transform = `translateX(${(1 - p) * 1150}px) rotate(${(1 - C01(p)) * 4}deg)`;
+      const tPrice = seg(f, a + 10, a + 26), e = eIO(tPrice);
+      const num = c.querySelector('.num');
+      if (it.o) {
+        num.textContent = fmt(lerp(it.o, it.p, e)).replace(/\d(?=\d{0}$)/, d => d);      // counts down from the old price
+        if (e >= 1) num.textContent = fmt(it.p);
+        c.querySelector('.old i').style.width = `${eOut(seg(f, a + 8, a + 16)) * 108}%`;
+        c.querySelector('.bOld').style.width = `${eOut(seg(f, a + 2, a + 12)) * (it.o / mx) * 100}%`;
+        c.querySelector('.bNew').style.width = `${(eOut(seg(f, a + 2, a + 12)) * (it.o / mx) * (1 - e) + (it.p / mx) * e) * 100}%`;
+      } else {
+        num.textContent = fmt(it.p * eOut(seg(f, a + 6, a + 20)), it.cents);
+        if (f >= a + 20) num.textContent = fmt(it.p, it.cents);
+        c.querySelector('.bOld').style.width = '0%';
+        c.querySelector('.bNew').style.width = `${eOut(seg(f, a + 6, a + 20)) * Math.max(0.06, it.p / mx) * 100}%`;
+        c.querySelector('.bNew').style.background = '#115E67';
+      }
+      const nw = c.querySelector('.new'); const pop = sp(f, a + 26, 8, 14, 0.35);
+      nw.style.transform = `scale(${1 + (f > a + 26 ? Math.max(0, (pop - 1)) * 0.6 + (1 - C01(pop)) * 0.12 : 0)})`; nw.style.transformOrigin = 'right center';
+    });
+    const nt = L.querySelector('.note'); if (nt) nt.style.opacity = 0.85 * seg(f, s.a + 30, s.a + 38);
+  });
+
+  // ---- finale: price wall rushes past, shapes explode, "Until 30 November" punches
+  const F = $('F'); show(F, f >= 330 && f < 392);
+  const fo = seg(f, 330, 338);
+  document.querySelectorAll('.ft').forEach((el, i) => {
+    const col = i % 3, dir = col % 2 ? 1 : -1;
+    el.style.transform = `translateY(${dir * (f - 330) * 26 + (dir < 0 ? 400 : -400)}px) rotate(${-8 + col * 0}deg) scale(${0.9 + fo * 0.1})`;
+    el.style.opacity = fo * (1 - seg(f, 378, 388)) * 0.92;
+  });
+  $('fGrid').style.transform = 'rotate(-10deg) scale(1.15)';
+  document.querySelectorAll('.fw').forEach((w, i) => {
+    const a = 340 + i * 9, p = sp(f, a, 8, 12, 0.45);
+    w.style.opacity = C01(p * 3) * (1 - seg(f, 380, 388));
+    w.style.transform = `scale(${0.5 + 0.5 * Math.min(p, 1.15)}) translateY(${(1 - C01(p)) * 60}px)`;
+  });
+
+  // ---- end card (teal), settles and holds still
+  const E = $('E'); show(E, f >= 382); E.style.clipPath = `circle(${eIO(seg(f, 382, 396)) * 1500}px at 500px 900px)`;
+  const lp = sp(f, 390, 14, 8, 0.65); $('logo').style.transform = f >= 412 ? 'translateY(0px)' : `translateY(${(1 - Math.min(lp, 1.04)) * 330}px)`;
+  [['ePromo', 398], ['eWa', 404], ['eArea', 410]].forEach(([id, a]) => { const p = eOut(seg(f, a, a + 8)); $(id).style.opacity = p; $(id).style.transform = `translateY(${(1 - p) * 24}px)`; });
+};
+render(0);
+</script></body></html>
