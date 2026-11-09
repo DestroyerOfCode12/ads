@@ -247,6 +247,7 @@ function update(f) {
   const settle = spring(Math.max(0, (f - S.s4[0] - 30) / 30) * 2.2, 7, 0.4);
   const yaw = Math.PI / 2 + (f >= S.s4[0] + 30 ? Math.PI * Math.min(1.08, settle) : 0);
   signPivot.rotation.set(swing, yaw, 0);
+  signPivot.visible = f >= S.s4[0];   // the sign is revealed in its own shot
   // trace growth
   const tp = tracePos(f);
   traces.forEach((m, i) => { m.scale.x = Math.max(0.0001, i < tp.stroke ? strokeLen[i] : i === tp.stroke ? tp.t * strokeLen[i] : 0.0001); });
