@@ -5,8 +5,8 @@ sys.path.insert(0, os.path.dirname(__file__))
 FPS = 30
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 D = os.path.join(ROOT, 'deliverables')
-SND = os.path.join(D, 'nimble_tech_solutions_what_you_need_sound.mp4')
-SIL = os.path.join(D, 'nimble_tech_solutions_what_you_need_silent.mp4')
+SND = os.path.join(D, 'nimble_tech_solutions_what_you_need_v2_sound.mp4')
+SIL = os.path.join(D, 'nimble_tech_solutions_what_you_need_v2_silent.mp4')
 run = lambda *a: subprocess.run(a, capture_output=True, text=True)
 
 print('== Streams')
