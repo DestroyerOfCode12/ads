@@ -14,13 +14,13 @@ ffmpeg -hide_banner -loglevel error -y -i build/mix_norm.wav -c:a aac -b:a 192k 
 STRIP=(-map_metadata -1 -map_metadata:s -1 -map_chapters -1 -fflags +bitexact -movflags +faststart
        -metadata:s:v handler_name= -metadata:s:a handler_name=)
 ffmpeg -hide_banner -loglevel error -y -i "$T/video.mp4" -i "$T/audio.m4a" -map 0:v -map 1:a -c copy \
-  -t 16 "${STRIP[@]}" "$OUT/nimble_tech_solutions_what_you_need_sound.mp4"
+  -t 16 "${STRIP[@]}" "$OUT/nimble_tech_solutions_what_you_need_v2_sound.mp4"
 ffmpeg -hide_banner -loglevel error -y -i "$T/video.mp4" -map 0:v -c copy -an \
-  "${STRIP[@]}" "$OUT/nimble_tech_solutions_what_you_need_silent.mp4"
+  "${STRIP[@]}" "$OUT/nimble_tech_solutions_what_you_need_v2_silent.mp4"
 python3 - <<'PY'
 from PIL import Image
 im = Image.open('build/frames/f0230.png').convert('RGB')
-im.save('deliverables/nimble_tech_solutions_what_you_need_poster.png', optimize=True)   # PIL writes no text chunks
-im.save('deliverables/nimble_tech_solutions_what_you_need_poster.jpg', quality=92, optimize=True)  # no EXIF passed
+im.save('deliverables/nimble_tech_solutions_what_you_need_v2_poster.png', optimize=True)   # PIL writes no text chunks
+im.save('deliverables/nimble_tech_solutions_what_you_need_v2_poster.jpg', quality=92, optimize=True)  # no EXIF passed
 PY
 echo done

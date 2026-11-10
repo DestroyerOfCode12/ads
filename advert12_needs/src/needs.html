@@ -169,13 +169,13 @@ window.render = function (f) {
   // ---- kinetic opening: words rise through masks, then burst into particles
   [['k1', 3], ['k2', 9], ['k3', 15]].forEach(([id, a]) => {
     const el = $(id), s = el.firstElementChild, p = eQ(seg(f, a, a + 20));
-    s.style.transform = `translateY(${(1 - p) * 105}%)`;
+    s.style.transform = `translateY(${(1 - p) * 135}%)`;
     const d = sm(seg(f, T.explode - 2, T.explode + 12));
     el.style.opacity = 1 - d; el.style.filter = `blur(${d * 7}px)`; el.style.transformOrigin = 'left center'; el.style.transform = `scale(${1 + d * 0.03})`;
     el.style.display = f < T.explode + 13 ? 'block' : 'none';
   });
   // ---- diagram: title, cards appear as the particles land, connectors grow, LEDs blink
-  const tA = T.card0 - 8; $('title').firstElementChild.style.transform = `translateY(${(1 - eQ(seg(f, tA, tA + 20))) * 105}%)`;
+  const tA = T.card0 - 8; $('title').firstElementChild.style.transform = `translateY(${(1 - eQ(seg(f, tA, tA + 20))) * 135}%)`;
   $('title').style.opacity = sm(seg(f, tA, tA + 10)) * (1 - sm(seg(f, T.flow - 14, T.flow)));
   for (let i = 0; i < 5; i++) {
     const a = T.card0 + i * T.cardStep, c = $('c' + i);
@@ -201,7 +201,7 @@ window.render = function (f) {
   // ---- payoff words
   [['w1', T.payoff + 4], ['w2', T.payoff + 10]].forEach(([id, a]) => {
     const el = $(id), s = el.firstElementChild, p = eQ(seg(f, a, a + 20));
-    s.style.transform = `translateY(${(1 - p) * 105}%)`; el.style.display = f >= a - 1 && f < T.end + 14 ? 'block' : 'none';
+    s.style.transform = `translateY(${(1 - p) * 135}%)`; el.style.display = f >= a - 1 && f < T.end + 14 ? 'block' : 'none';
     const x = sm(seg(f, T.end - 4, T.end + 10)); el.style.opacity = 1 - x; el.style.filter = `blur(${x * 6}px)`;
   });
   drawParticles(f);
