@@ -1,0 +1,207 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+:root{--teal:#115E67;--warm:#F7F5F0;--mist:#D9ECEC;--ink:#18282A;--apricot:#F2B66D}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--ink);font-family:"DejaVu Sans",sans-serif}
+.abs{position:absolute}
+.layer{position:absolute;inset:0}
+#cv{position:absolute;left:0;top:0}
+.kw{position:absolute;left:96px;width:808px;font-weight:700;color:var(--warm);white-space:nowrap;overflow:hidden;line-height:1.1}
+.kw span{display:inline-block}
+.card{position:absolute;left:96px;width:808px;height:172px;border-radius:28px;background:#21383b;border:3px solid #2f5357;display:flex;align-items:center;gap:30px;padding:0 34px;opacity:0}
+.ic{width:104px;height:104px;border-radius:26px;flex:none;position:relative;background:var(--teal)}
+.lbl{font-weight:700;font-size:46px;color:var(--warm);white-space:nowrap}
+.sub{font-size:28px;color:var(--mist);opacity:.85;margin-top:8px;white-space:nowrap}
+.num{position:absolute;right:30px;top:22px;font-family:"DejaVu Sans Mono",monospace;font-size:26px;color:var(--apricot);letter-spacing:3px}
+.conn{position:absolute;width:6px;margin-left:-3px;border-radius:3px;background:#2f5357}
+</style></head><body>
+<svg class="abs" width="1080" height="1920" style="left:0;top:0"><defs><pattern id="ang" width="180" height="180" patternUnits="userSpaceOnUse" patternTransform="rotate(30)"><path d="M0 0 L90 90 L0 180 M90 90 L180 0 M90 90 L180 180" stroke="#F7F5F0" stroke-opacity=".05" stroke-width="2" fill="none"/></pattern></defs><rect id="patrect" x="-400" y="-400" width="1880" height="2720" fill="url(#ang)"/></svg>
+
+<!-- diagram (under the particles) -->
+<div id="D" class="layer">
+  <div id="title" class="kw" style="top:204px;font-size:40px;color:var(--mist);height:60px"><span>Everything your business needs online</span></div>
+  <div id="conns"></div>
+  <div id="cards"></div>
+  <div id="search" class="abs" style="left:96px;width:808px;top:200px;height:96px;border-radius:48px;background:#F7F5F0;display:flex;align-items:center;padding:0 36px;gap:22px;opacity:0">
+    <div style="width:34px;height:34px;border:6px solid #18282A;border-radius:50%;position:relative;flex:none"><div style="position:absolute;width:16px;height:6px;background:#18282A;right:-14px;bottom:-7px;transform:rotate(45deg)"></div></div>
+    <div id="q" style="font-size:40px;color:#18282A;white-space:nowrap"></div></div>
+  <div id="bubble" class="abs" style="left:96px;top:1418px;max-width:808px;height:104px;border-radius:30px 30px 30px 8px;background:#F2B66D;display:flex;align-items:center;gap:20px;padding:0 34px;opacity:0">
+    <div style="width:56px;height:56px;border-radius:50%;background:#18282A;flex:none;position:relative"><div style="position:absolute;left:15px;top:17px;width:26px;height:20px;border:4px solid #F2B66D;border-radius:4px"></div></div>
+    <div style="font-weight:700;font-size:30px;color:#18282A;white-space:nowrap">New enquiry: are you open today?</div></div>
+</div>
+
+<canvas id="cv" width="1080" height="1920"></canvas>
+
+<!-- kinetic type (over the particles) -->
+<div id="K" class="layer">
+  <div class="kw" id="k1" style="top:660px;font-size:104px;height:140px"><span>Your website</span></div>
+  <div class="kw" id="k2" style="top:790px;font-size:104px;height:140px"><span>is more than</span></div>
+  <div class="kw" id="k3" style="top:920px;font-size:104px;height:140px;color:var(--apricot)"><span>a website.</span></div>
+  <div class="kw" id="w1" style="top:760px;font-size:118px;height:140px;text-align:center"><span>We set up</span></div>
+  <div class="kw" id="w2" style="top:900px;font-size:118px;height:140px;text-align:center;color:var(--apricot)"><span>all of it.</span></div>
+</div>
+
+<!-- end card -->
+<div id="E" class="layer" style="background:var(--teal);clip-path:circle(0px at 500px 960px)">
+  <svg class="abs" width="1080" height="1920" style="left:0;top:0"><rect x="-400" y="-400" width="1880" height="2720" fill="url(#ang)"/></svg>
+  <div class="abs" style="left:96px;width:808px;top:600px;text-align:center;overflow:hidden;height:330px"><div id="logo" style="transform:translateY(330px)">
+    <div style="font-family:P052;font-weight:700;font-size:172px;color:#fff;line-height:1">Nimble</div>
+    <div style="width:150px;height:12px;border-radius:6px;background:#F2B66D;margin:22px auto 18px"></div>
+    <div style="font-size:68px;color:#fff;letter-spacing:1px">Tech Solutions</div></div></div>
+  <div id="e1" class="abs" style="left:96px;width:808px;top:1030px;text-align:center;font-size:46px;color:#F7F5F0;opacity:0">Websites and digital services</div>
+  <div id="e2" class="abs" style="left:96px;width:808px;top:1118px;text-align:center;font-size:50px;font-weight:700;color:#F2B66D;opacity:0">WhatsApp 068 178 9708</div>
+  <div id="e3" class="abs" style="left:96px;width:808px;top:1206px;text-align:center;font-size:40px;color:#D9ECEC;opacity:0">Midrand, Johannesburg, Remote</div>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+const C01 = v => Math.max(0, Math.min(1, v)), lerp = (a, b, t) => a + (b - a) * t;
+const eOut = t => 1 - Math.pow(1 - C01(t), 3), eIn = t => Math.pow(C01(t), 3);
+const eIO = t => { t = C01(t); return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+const seg = (f, a, b) => C01((f - a) / (b - a));
+const spring = (t, k, z) => t <= 0 ? 0 : 1 - Math.exp(-z * k * t) * Math.cos(k * Math.sqrt(1 - z * z) * t);
+const sp = (f, f0, dur = 14, k = 9, z = 0.5) => spring(Math.max(0, (f - f0) / dur) * 3, k / 3, z);
+let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+
+// ---------- timeline (120 bpm: one beat = 15 frames)
+const T = { explode: 46, card0: 64, cardStep: 33, flow: 255, flowEnd: 352, payoff: 352, end: 390 };
+
+// ---------- the five parts
+const PARTS = [
+  ['Domain', 'Your name online', 'dom'], ['Website hosting', 'Keeps your site live', 'host'],
+  ['Website', 'Your shopfront, built for phones', 'web'], ['Business email', 'Addresses on your own name', 'mail'],
+  ['SEO', 'Helps local customers find you', 'seo']];
+const CARD_TOP = 340, CARD_H = 172, CARD_GAP = 40;
+const cardY = i => CARD_TOP + i * (CARD_H + CARD_GAP);
+const ICON = {
+  dom: '<div style="position:absolute;inset:22px;border:6px solid #F7F5F0;border-radius:50%"></div><div style="position:absolute;left:48px;top:22px;width:8px;height:60px;background:#F7F5F0;border-radius:3px"></div><div style="position:absolute;left:22px;top:48px;width:60px;height:8px;background:#F7F5F0;border-radius:3px"></div>',
+  host: [0, 1, 2].map(j => `<div style="position:absolute;left:20px;right:20px;top:${20 + j * 23}px;height:17px;border-radius:5px;background:#F7F5F0"><div class="led" style="position:absolute;left:6px;top:5px;width:7px;height:7px;border-radius:50%;background:#115E67"></div></div>`).join(''),
+  web: '<div style="position:absolute;left:18px;right:18px;top:20px;bottom:20px;border:6px solid #F7F5F0;border-radius:10px"></div><div style="position:absolute;left:18px;right:18px;top:20px;height:16px;background:#F7F5F0;border-radius:8px 8px 0 0"></div><div style="position:absolute;left:30px;top:46px;width:44px;height:10px;background:#F2B66D;border-radius:5px"></div>',
+  mail: '<div style="position:absolute;left:18px;right:18px;top:28px;bottom:28px;border:6px solid #F7F5F0;border-radius:8px"></div><div style="position:absolute;left:30px;top:24px;width:44px;height:44px;border-right:6px solid #F7F5F0;border-bottom:6px solid #F7F5F0;transform:rotate(45deg) scale(.75,.75);transform-origin:center"></div>',
+  seo: '<div style="position:absolute;left:20px;top:20px;width:46px;height:46px;border:7px solid #F7F5F0;border-radius:50%"></div><div style="position:absolute;left:58px;top:66px;width:30px;height:9px;background:#F7F5F0;border-radius:4px;transform:rotate(45deg);transform-origin:left center"></div>',
+};
+$('cards').innerHTML = PARTS.map(([l, s, k], i) => `<div class="card" id="c${i}" style="top:${cardY(i)}px">
+  <div class="ic" style="background:${i % 2 ? '#2f7f87' : '#115E67'}">${ICON[k]}</div>
+  <div><div class="lbl">${l}</div><div class="sub">${s}</div></div><div class="num">0${i + 1}</div></div>`).join('');
+$('conns').innerHTML = PARTS.slice(1).map((_, i) => `<div class="conn" id="n${i}" style="left:148px;top:${cardY(i) + CARD_H}px;height:0"></div>`).join('');
+
+// ---------- particles: targets sampled from real glyphs and shapes
+const N = 1600, cv = $('cv'), ctx = cv.getContext('2d');
+function sampleText(lines) {
+  const o = document.createElement('canvas'); o.width = 1080; o.height = 1920; const x = o.getContext('2d');
+  x.fillStyle = '#fff'; x.textBaseline = 'top';
+  lines.forEach(([txt, size, top]) => { x.font = `bold ${size}px "DejaVu Sans"`; x.fillText(txt, 96, top + size * 0.1); });
+  const d = x.getImageData(0, 0, 1080, 1920).data, pts = [];
+  for (let y = 0; y < 1920; y += 4) for (let xx = 0; xx < 1080; xx += 4) if (d[(y * 1080 + xx) * 4 + 3] > 140) pts.push([xx, y]);
+  return pts;
+}
+let P = null;
+function initParticles() {
+  seed = 11;
+  const textPts = sampleText([['Your website', 104, 660], ['is more than', 104, 790], ['a website.', 104, 920]]);
+  P = [];
+  for (let i = 0; i < N; i++) {
+    const tp = textPts[Math.floor(rnd() * textPts.length)];
+    const ang = Math.atan2(tp[1] - 860, tp[0] - 500) + (rnd() - .5) * 1.2, rad = 180 + rnd() * 520;
+    const card = i % 5;
+    P.push({
+      tx: tp[0], ty: tp[1],
+      ex: tp[0] + Math.cos(ang) * rad, ey: tp[1] + Math.sin(ang) * rad * 1.3,
+      card, cx: 96 + 20 + rnd() * 768, cy: cardY(card) + 14 + rnd() * (CARD_H - 28),
+      delay: rnd() * 10, ph: rnd() * 6.28, sz: 1.6 + rnd() * 2.6,
+      col: rnd() < .55 ? [242, 182, 109] : rnd() < .6 ? [217, 236, 236] : [247, 245, 240],
+      fl: rnd(), lane: (rnd() - .5) * 26,
+    });
+  }
+}
+// flow path: search pill, down the right side of the stack, into the message bubble
+const PATH = [[790, 296], [928, 330], [860, cardY(4) + 86], [860, cardY(0) + 86], [860, cardY(2) + 86], [860, cardY(4) + CARD_H], [700, 1418]];
+PATH.splice(2, 4, [928, cardY(0) + 86], [928, cardY(4) + CARD_H]);      // straight run down the stack
+const pathLen = PATH.slice(1).reduce((a, p, i) => a + Math.hypot(p[0] - PATH[i][0], p[1] - PATH[i][1]), 0);
+function onPath(u) {
+  let d = C01(u) * pathLen;
+  for (let i = 1; i < PATH.length; i++) { const a = PATH[i - 1], b = PATH[i], l = Math.hypot(b[0] - a[0], b[1] - a[1]); if (d <= l) return [lerp(a[0], b[0], d / l), lerp(a[1], b[1], d / l)]; d -= l; }
+  return PATH[PATH.length - 1];
+}
+function drawParticles(f) {
+  ctx.clearRect(0, 0, 1080, 1920);
+  if (f < T.explode - 1 || f > T.end + 30) return;
+  ctx.globalCompositeOperation = 'lighter';
+  for (let i = 0; i < N; i++) {
+    const p = P[i]; let x, y, a = 1, s = p.sz;
+    if (f < T.flow) {
+      // explode from the words, drift, then fly into the card that belongs to this particle
+      const ex = eOut(seg(f, T.explode, T.explode + 18));
+      const dx = Math.sin(f * 0.05 + p.ph) * 16, dy = Math.cos(f * 0.043 + p.ph) * 16;
+      let x0 = lerp(p.tx, p.ex, ex) + dx * ex, y0 = lerp(p.ty, p.ey, ex) + dy * ex;
+      const ca = T.card0 + p.card * T.cardStep - 10 + p.delay, gather = eIO(seg(f, ca, ca + 16));
+      // a gentle arc on the way in
+      const mx = (x0 + p.cx) / 2 + Math.sin(p.ph) * 120 * (1 - Math.abs(gather * 2 - 1));
+      x = lerp(x0, p.cx, gather) + (mx - (x0 + p.cx) / 2) * 0.4 * Math.sin(gather * Math.PI);
+      y = lerp(y0, p.cy, gather);
+      a = f < T.explode ? 0 : 1 - seg(f, ca + 14, ca + 24);         // dissolve into the solid card
+      a *= 0.9;
+    } else if (f < T.flowEnd + 6) {
+      // the system comes alive: a stream from the search, down the stack, into a message
+      const start = T.flow + 8 + p.fl * 70, u = (f - start) / 26;
+      if (u < 0 || u > 1) continue;
+      [x, y] = onPath(eIO(u)); x += p.lane * Math.sin(u * Math.PI); y += Math.sin(f * 0.3 + p.ph) * 3;
+      a = Math.sin(u * Math.PI) * 0.95; s = p.sz * 0.9;
+    } else {
+      // payoff: burst outward from the centre behind "We set up all of it."
+      const b = eOut(seg(f, T.payoff + 6, T.payoff + 30));
+      const ang = p.ph * 1.0, r = 60 + b * (400 + p.fl * 700);
+      x = 500 + Math.cos(ang) * r; y = 900 + Math.sin(ang) * r * 1.4; a = (1 - seg(f, T.payoff + 18, T.end + 8)) * (b > 0 ? 1 : 0);
+    }
+    if (a <= 0.01) continue;
+    const [r, g, bl] = p.col;
+    ctx.fillStyle = `rgba(${r},${g},${bl},${a * 0.35})`; ctx.beginPath(); ctx.arc(x, y, s * 2.4, 0, 6.283); ctx.fill();
+    ctx.fillStyle = `rgba(${r},${g},${bl},${a})`; ctx.beginPath(); ctx.arc(x, y, s, 0, 6.283); ctx.fill();
+  }
+  ctx.globalCompositeOperation = 'source-over';
+}
+
+window.render = function (f) {
+  if (!P) initParticles();
+  $('patrect').setAttribute('transform', `translate(${(f * 1.2) % 180},${(f * 0.6) % 180})`);
+  // ---- kinetic opening: words rise through masks, then burst into particles
+  [['k1', 3], ['k2', 9], ['k3', 15]].forEach(([id, a]) => {
+    const el = $(id), s = el.firstElementChild, p = sp(f, a, 12, 10, 0.5);
+    s.style.transform = `translateY(${(1 - p) * 110}%) skewY(${(1 - C01(p)) * 6}deg)`;
+    el.style.opacity = 1 - seg(f, T.explode - 1, T.explode + 3); el.style.display = f < T.explode + 4 ? 'block' : 'none';
+  });
+  // ---- diagram: title, cards appear as the particles land, connectors grow, LEDs blink
+  const tA = T.card0 - 6; $('title').firstElementChild.style.transform = `translateY(${(1 - sp(f, tA, 12)) * 110}%)`;
+  $('title').style.opacity = (f >= tA ? 1 : 0) * (1 - seg(f, T.flow - 8, T.flow));
+  for (let i = 0; i < 5; i++) {
+    const a = T.card0 + i * T.cardStep, c = $('c' + i);
+    const o = seg(f, a + 4, a + 14); c.style.opacity = o;
+    const pop = sp(f, a + 4, 12, 11, 0.45); c.style.transform = `scale(${0.94 + 0.06 * Math.min(pop, 1.04)})`;
+    // pulse when the stream passes this card
+    const passF = T.flow + 8 + 35 + (cardY(i) - cardY(0)) / 1100 * 26 * 0.6;
+    const pulse = f >= T.flow ? Math.max(0, Math.sin(seg(f, passF - 6, passF + 22) * Math.PI)) : 0;
+    c.style.borderColor = `rgba(242,182,109,${pulse})`; c.style.boxShadow = pulse > 0 ? `0 0 ${40 * pulse}px rgba(242,182,109,${0.35 * pulse})` : 'none';
+    if (i > 0) $('n' + (i - 1)).style.height = `${eOut(seg(f, a, a + 10)) * CARD_GAP}px`;
+    c.style.display = f < T.payoff + 4 ? 'flex' : 'none';
+  }
+  document.querySelectorAll('.led').forEach((el, j) => el.style.background = (Math.floor((f + j * 5) / 6) % 3) ? '#5fc3a0' : '#115E67');
+  // ---- flow: search types, stream runs, the message arrives
+  const sO = seg(f, T.flow - 6, T.flow + 2) * (1 - seg(f, T.payoff, T.payoff + 4));
+  $('search').style.opacity = sO; $('search').style.transform = `translateY(${(1 - eOut(seg(f, T.flow - 6, T.flow + 6))) * -40}px)`;
+  const q = 'bakery near me'; $('q').textContent = q.slice(0, Math.floor(seg(f, T.flow, T.flow + 12) * q.length));
+  const bp = sp(f, T.flow + 62, 12, 11, 0.45);
+  $('bubble').style.opacity = C01(bp * 2) * (1 - seg(f, T.payoff, T.payoff + 4)); $('bubble').style.transform = `scale(${Math.min(bp, 1.03)}) translateY(${(1 - C01(bp)) * 40}px)`; $('bubble').style.transformOrigin = 'left bottom';
+  $('D').style.opacity = 1 - seg(f, T.payoff, T.payoff + 5);
+  // ---- payoff words
+  [['w1', T.payoff + 4], ['w2', T.payoff + 10]].forEach(([id, a]) => {
+    const el = $(id), s = el.firstElementChild, p = sp(f, a, 10, 11, 0.5);
+    s.style.transform = `translateY(${(1 - p) * 110}%)`; el.style.display = f >= a - 1 && f < T.end + 14 ? 'block' : 'none';
+  });
+  drawParticles(f);
+  // ---- end card
+  $('E').style.clipPath = `circle(${eIO(seg(f, T.end, T.end + 14)) * 1500}px at 500px 960px)`;
+  const lp = sp(f, T.end + 8, 14, 8, 0.65); $('logo').style.transform = f >= T.end + 30 ? 'translateY(0px)' : `translateY(${(1 - Math.min(lp, 1.04)) * 330}px)`;
+  [['e1', T.end + 16], ['e2', T.end + 22], ['e3', T.end + 28]].forEach(([id, a]) => { const p = eOut(seg(f, a, a + 8)); $(id).style.opacity = p; $(id).style.transform = `translateY(${(1 - p) * 24}px)`; });
+};
+document.fonts.ready.then(() => { initParticles(); render(0); });
+</script></body></html>
