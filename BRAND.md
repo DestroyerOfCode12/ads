@@ -45,6 +45,8 @@ Audience: small business owners in greater Johannesburg, Midrand base, plus remo
 | 8 | Open all hours | Blender, `advert8/` (overlaps the angle of advert 3) |
 | 9 | Motion reel | product UI and kinetic type, `advert9_motion/` |
 | 10 | November pricing | pricing showreel, `advert10_pricing/` |
+| 11 | The N city | three.js real time 3D, `advert11_ncity/` |
+| 12 | What a website actually needs | particles and diagram explainer, `advert12_needs/` |
 
 ## Current prices (for pricing adverts only)
 November 2026 promotion, valid until 30 November 2026 (struck through price, then promotional price):
