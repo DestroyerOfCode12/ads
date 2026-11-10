@@ -99,7 +99,7 @@ NOTES = [74, 76, 78, 81, 83]
 for k in range(5):
     a = 64 + k * 33
     put(fx, whoosh(14, 2000, 11000), fr(a - 10), 0.05, ((k % 2) * 2 - 1) * 0.3)
-    put(fx, blip(NOTES[k], 0.3) + 0.4 * blip(NOTES[k] + 12, 0.3), fr(a + 5), 0.09)
+    put(fx, blip(NOTES[k], 0.3) + 0.4 * blip(NOTES[k] + 12, 0.3), fr(a + 12), 0.09)
 for i in range(0, 14): put(fx, tick(0.6), fr(255 + i * 0.86), 0.18)               # search typing
 put(fx, whoosh(70, 1500, 9000), fr(263), 0.05)                                   # the stream runs
 for k in range(5): put(fx, blip(86 + k, 0.1), fr(298 + k * 4), 0.05, 0.4)        # cards pulse

@@ -5,7 +5,7 @@ const root = path.resolve(__dirname, '..'); const out = path.join(root, 'build/s
 const args = process.argv.slice(2);
 let frames = []; const fi = args.indexOf('--frames');
 if (fi >= 0) frames = args[fi + 1].split(',').map(Number); else { const a = +(args[0] || 0), b = +(args[1] || 479); for (let f = a; f <= b; f++) frames.push(f); }
-const si = args.indexOf('--samples'); const S = si >= 0 ? +args[si + 1] : 4;
+const si = args.indexOf('--samples'); const S = si >= 0 ? +args[si + 1] : 6;
 (async () => {
   const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1080, height: 1920 } });
   await p.goto('file://' + path.join(root, 'src/needs.html')); await p.evaluate(() => document.fonts.ready);
