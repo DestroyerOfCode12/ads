@@ -47,6 +47,7 @@ Audience: small business owners in greater Johannesburg, Midrand base, plus remo
 | 10 | November pricing | pricing showreel, `advert10_pricing/` |
 | 11 | The N city | three.js real time 3D, `advert11_ncity/` |
 | 12 | What a website actually needs | particles and diagram explainer, `advert12_needs/` |
+| 13 | Still Online | 3D outage story with stylised figures and an ElevenLabs voiceover, `advert13_outage/` |
 
 ## Current prices (for pricing adverts only)
 November 2026 promotion, valid until 30 November 2026 (struck through price, then promotional price):
