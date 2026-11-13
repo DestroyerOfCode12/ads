@@ -1,0 +1,303 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#20282c;font-family:"DejaVu Sans",sans-serif}
+canvas#gl{display:block;position:absolute;left:0;top:0}
+.abs{position:absolute}
+#grade{position:absolute;inset:0;pointer-events:none}
+.kw{position:absolute;left:96px;width:808px;font-weight:700;color:#F7F5F0;white-space:nowrap;overflow:hidden;line-height:1.12;text-shadow:0 6px 30px rgba(0,0,0,.45)}
+.kw span{display:inline-block}
+#band{position:absolute;left:0;right:0;top:0;height:720px;background:linear-gradient(180deg,rgba(9,27,30,.78),rgba(9,27,30,0));opacity:0}
+#end{position:absolute;inset:0;background:radial-gradient(85% 55% at 50% 40%,#1E7883 0%,#115E67 45%,#0C454C 100%);opacity:0}
+</style>
+<script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js","three/addons/":"/node_modules/three/examples/jsm/"}}</script>
+</head><body>
+<div id="grade"></div>
+<div id="band"></div>
+<div id="T1" class="kw" style="top:250px;font-size:92px;height:116px"><span>Inbox down</span></div>
+<div id="T1b" class="kw" style="top:366px;font-size:92px;height:116px;color:#D9ECEC"><span>again?</span></div>
+<div id="T2a" class="kw" style="top:250px;font-size:84px;height:110px"><span>Not everyone’s</span></div>
+<div id="T2b" class="kw" style="top:356px;font-size:84px;height:110px;color:#F2B66D"><span>offline today.</span></div>
+<div id="ul" class="abs" style="left:96px;top:466px;height:12px;width:0;border-radius:6px;background:#F2B66D;box-shadow:0 4px 18px rgba(242,182,109,.45)"></div>
+<div id="toast" class="abs" style="left:96px;top:1300px;width:808px;height:150px;border-radius:30px;background:rgba(247,245,240,.97);box-shadow:0 24px 50px rgba(0,0,0,.28);display:flex;align-items:center;gap:28px;padding:0 34px;opacity:0">
+  <div style="width:86px;height:86px;border-radius:22px;background:#115E67;flex:none;position:relative"><div style="position:absolute;left:18px;top:24px;width:50px;height:38px;border:6px solid #D9ECEC;border-radius:7px"></div></div>
+  <div style="flex:1"><div style="font-weight:700;font-size:40px;color:#18282A">New email</div><div style="font-size:32px;color:#4b5b5d;margin-top:6px">Quote request</div></div>
+  <div style="font-size:26px;color:#7b8a8b">now</div></div>
+<div id="T3a" class="kw" style="top:230px;font-size:72px;height:96px"><span>Your own domain.</span></div>
+<div id="T3b" class="kw" style="top:326px;font-size:72px;height:96px"><span>Your own email.</span></div>
+<div id="T3c" class="kw" style="top:422px;font-size:72px;height:96px;color:#F2B66D"><span>Your own support.</span></div>
+<div id="end">
+  <div id="glow" class="abs" style="left:140px;top:380px;width:720px;height:720px;border-radius:50%;background:radial-gradient(circle,rgba(242,182,109,.28),rgba(242,182,109,0) 68%)"></div>
+  <div class="abs" style="left:96px;width:808px;top:470px;text-align:center;height:330px"><div id="logo">
+    <svg width="808" height="190" viewBox="0 0 808 190" style="display:block"><text id="lw" x="404" y="160" text-anchor="middle" font-family="P052" font-weight="700" font-size="172" fill="#ffffff" fill-opacity="0" stroke="#ffffff" stroke-width="2.5" stroke-dasharray="1400" stroke-dashoffset="1400">Nimble</text></svg>
+    <div style="width:150px;height:12px;border-radius:6px;background:#F2B66D;margin:22px auto 18px"></div>
+    <div style="font-size:68px;color:#fff;letter-spacing:1px">Tech Solutions</div></div></div>
+  <div id="e1" class="abs" style="left:96px;width:808px;top:880px;text-align:center;font-size:50px;font-weight:700;color:#F7F5F0;opacity:0">Domains. Email. Websites.</div>
+  <div id="e2" class="abs" style="left:96px;width:808px;top:968px;text-align:center;font-size:40px;color:#D9ECEC;opacity:0;line-height:1.35">Stay connected with<br>Nimble Tech Solutions.</div>
+  <div id="cta" class="abs" style="left:300px;width:400px;top:1150px;height:110px;border-radius:55px;background:#F2B66D;color:#18282A;font-weight:700;font-size:48px;display:flex;align-items:center;justify-content:center;box-shadow:0 18px 40px rgba(0,0,0,.25);opacity:0;overflow:hidden"><div id="sheen" style="position:absolute;top:-20px;bottom:-20px;width:90px;left:-140px;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.55),rgba(255,255,255,0));transform:skewX(-20deg)"></div><span style="position:relative">Switch today</span></div>
+  <div id="e3" class="abs" style="left:96px;width:808px;top:1300px;text-align:center;font-size:40px;font-weight:700;color:#F7F5F0;opacity:0">WhatsApp 068 178 9708</div>
+</div>
+<script type="module">
+import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const W = 1080, H = 1920, N = 600;
+// shots (frames, 30 fps). Beats at 120 bpm land every 15 frames.
+const S = { s1: [0, 150], s2: [150, 300], s3: [300, 450], end: 450 };
+const C01 = v => Math.max(0, Math.min(1, v)), lerp = (a, b, t) => a + (b - a) * t;
+const seg = (f, a, b) => C01((f - a) / (b - a));
+const sm = t => { t = C01(t); return t * t * t * (t * (t * 6 - 15) + 10); };
+const eQ = t => 1 - Math.pow(1 - C01(t), 5);
+let seed = 5; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(W, H); renderer.setPixelRatio(1); renderer.domElement.id = 'gl';
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+document.body.prepend(renderer.domElement);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xC9CDCF); scene.fog = new THREE.Fog(0xC9CDCF, 14, 40);
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture; scene.environmentIntensity = 0.5;
+
+// light: cool overhead office light, warm sun through the window on the right
+const hemi = new THREE.HemisphereLight(0xe8eef2, 0xb9b2a8, 0.9); scene.add(hemi);
+const office = new THREE.DirectionalLight(0xe6eef5, 1.4); office.position.set(-6, 14, 8); office.castShadow = true;
+office.shadow.mapSize.set(2048, 2048); Object.assign(office.shadow.camera, { left: -16, right: 16, top: 12, bottom: -12, near: 2, far: 40 });
+office.shadow.bias = -0.0005; office.shadow.normalBias = 0.02; scene.add(office);
+const sun = new THREE.DirectionalLight(0xffd29a, 3.2); sun.position.set(22, 9, 2); sun.target.position.set(8, 0, 1);
+sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048); Object.assign(sun.shadow.camera, { left: -6, right: 6, top: 6, bottom: -6, near: 2, far: 40 });
+sun.shadow.bias = -0.0005; sun.shadow.normalBias = 0.02; scene.add(sun, sun.target);
+const warmFill = new THREE.PointLight(0xffc27a, 0, 8, 1.5); warmFill.position.set(9.5, 2.6, 2.4); scene.add(warmFill);
+
+// ---------- room
+const M = (c, r = 0.7, extra = {}) => new THREE.MeshPhysicalMaterial({ color: c, roughness: r, ...extra });
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(60, 40), M(0xB9B6B0, 0.85)); floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
+const backWall = new THREE.Mesh(new THREE.PlaneGeometry(60, 8), M(0xD6D8D7, 0.9)); backWall.position.set(0, 4, -8); backWall.receiveShadow = true; scene.add(backWall);
+for (let i = 0; i < 6; i++) { const w = new THREE.Mesh(new THREE.PlaneGeometry(2.6, 2.4), new THREE.MeshBasicMaterial({ color: 0xE9EEF1 })); w.position.set(-15 + i * 4.2, 3.2, -7.98); scene.add(w); }
+const rightWall = new THREE.Mesh(new THREE.PlaneGeometry(40, 8), M(0xE4DED3, 0.9)); rightWall.rotation.y = -Math.PI / 2; rightWall.position.set(12.5, 4, 0); rightWall.receiveShadow = true; scene.add(rightWall);
+const sunWin = new THREE.Mesh(new THREE.PlaneGeometry(5.5, 3.2), new THREE.MeshBasicMaterial({ color: 0xFFF1D6 })); sunWin.rotation.y = -Math.PI / 2; sunWin.position.set(12.48, 2.4, 1.2); scene.add(sunWin);
+const plantMat = M(0x5E8C6A, 0.8), potMat = M(0xEDE7DC, 0.6);
+function plant(x, z, s = 1) { const g = new THREE.Group(); const pot = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.17, 0.4, 24), potMat); pot.position.y = 0.2; pot.castShadow = true; g.add(pot); for (let i = 0; i < 7; i++) { const l = new THREE.Mesh(new THREE.SphereGeometry(0.2 + rnd() * 0.1, 16, 12), plantMat); l.position.set((rnd() - .5) * .35, 0.5 + rnd() * 0.45, (rnd() - .5) * .35); l.scale.y = 1.4; l.castShadow = true; g.add(l); } g.position.set(x, 0, z); g.scale.setScalar(s); scene.add(g); return g; }
+
+// ---------- canvas textures: frozen screen with spinner, the inbox, the phone
+function canvasTex(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return { c, x: c.getContext('2d'), t }; }
+const frozen = [canvasTex(512, 320), canvasTex(512, 320)];
+function drawFrozen(f) {
+  frozen.forEach((T, k) => {
+    const x = T.x; x.fillStyle = '#dfe3e6'; x.fillRect(0, 0, 512, 320);
+    x.fillStyle = '#c9cfd3'; x.fillRect(0, 0, 512, 34); x.fillStyle = '#eef1f3'; x.beginPath(); x.roundRect(40, 60, 432, 220, 12); x.fill();
+    for (let i = 0; i < 4; i++) { x.fillStyle = '#d5dadd'; x.fillRect(64, 88 + i * 44, 300 - i * 40, 16); }
+    const cx = 256, cy = 170, a = f * 0.22 + k * 1.3;
+    for (let i = 0; i < 10; i++) { x.strokeStyle = `rgba(90,104,112,${0.15 + 0.85 * ((i + 1) / 10)})`; x.lineWidth = 7; x.lineCap = 'round'; const t = a + i * 0.5; x.beginPath(); x.moveTo(cx + Math.cos(t) * 22, cy + Math.sin(t) * 22); x.lineTo(cx + Math.cos(t) * 38, cy + Math.sin(t) * 38); x.stroke(); }
+    T.t.needsUpdate = true;
+  });
+}
+const inbox = canvasTex(1024, 640);
+const MAILS = [['Website enquiry', 'Hi, do you deliver to Midrand?', '#115E67'], ['Quote request', 'Could you send a price for 20 boxes?', '#F2B66D'], ['Booking for Saturday', 'Is 10:00 still available?', '#2f7f87'], ['New order', 'Order received, details inside', '#115E67'], ['Supplier update', 'Your delivery leaves today', '#F2B66D'], ['Meeting tomorrow', 'See you at 9, thanks', '#2f7f87']];
+const MAIL0 = 312, MAILSTEP = 17;
+function drawInbox(f) {
+  const x = inbox.x; x.fillStyle = '#F7F5F0'; x.fillRect(0, 0, 1024, 640);
+  x.fillStyle = '#115E67'; x.fillRect(0, 0, 1024, 96);
+  x.fillStyle = '#F7F5F0'; x.font = 'bold 40px "DejaVu Sans"'; x.fillText('Inbox', 36, 62);
+  x.font = '30px "DejaVu Sans"'; x.fillStyle = '#D9ECEC'; x.fillText('hello@theirbusiness.co.za', 200, 60);
+  // emails arrive one after another at the top of the list and push the others down
+  const arrived = MAILS.map((m, i) => ({ m, t: f - (MAIL0 + i * MAILSTEP) })).filter(o => o.t >= 0).reverse();
+  let y = 112;
+  arrived.forEach((o, j) => {
+    const slide = j === 0 ? eQ(o.t / 10) : 1, rowH = 104 * slide;
+    if (rowH < 1) return;
+    x.save(); x.globalAlpha = j === 0 ? sm(o.t / 6) : 1;
+    x.fillStyle = j === 0 && o.t < 40 ? `rgba(242,182,109,${0.18 * (1 - o.t / 40)})` : '#ffffff'; x.fillRect(16, y, 992, rowH - 8);
+    if (rowH > 60) {
+      x.fillStyle = o.m[2]; x.beginPath(); x.arc(70, y + 48, 30, 0, 7); x.fill();
+      x.fillStyle = '#18282A'; x.font = 'bold 32px "DejaVu Sans"'; x.fillText(o.m[0], 122, y + 42);
+      x.fillStyle = '#5b6b6d'; x.font = '26px "DejaVu Sans"'; x.fillText(o.m[1], 122, y + 80);
+      x.fillStyle = '#F2B66D'; x.beginPath(); x.arc(978, y + 46, 9, 0, 7); x.fill();
+    }
+    x.restore(); y += rowH;
+  });
+  if (!arrived.length) { x.fillStyle = '#b9c4c4'; x.font = '28px "DejaVu Sans"'; x.fillText('All caught up', 36, 170); }
+  inbox.t.needsUpdate = true;
+}
+const phone = canvasTex(360, 720);
+function drawPhone(f) {
+  const x = phone.x, on = sm(seg(f, 196, 202));
+  x.fillStyle = '#0d1517'; x.fillRect(0, 0, 360, 720);
+  if (on > 0) {
+    x.globalAlpha = on; const g = x.createLinearGradient(0, 0, 0, 720); g.addColorStop(0, '#1E7883'); g.addColorStop(1, '#0C454C'); x.fillStyle = g; x.fillRect(0, 0, 360, 720);
+    x.fillStyle = '#F7F5F0'; x.font = '300 86px "DejaVu Sans"'; x.textAlign = 'center'; x.fillText('10:24', 180, 170); x.textAlign = 'left';
+    const n = eQ(seg(f, 200, 212)); x.globalAlpha = on * n;
+    x.fillStyle = 'rgba(247,245,240,.95)'; x.beginPath(); x.roundRect(18, 230 - (1 - n) * 40, 324, 110, 22); x.fill();
+    x.fillStyle = '#115E67'; x.beginPath(); x.roundRect(34, 252 - (1 - n) * 40, 56, 56, 14); x.fill();
+    x.fillStyle = '#18282A'; x.font = 'bold 26px "DejaVu Sans"'; x.fillText('New email', 104, 274 - (1 - n) * 40);
+    x.fillStyle = '#4b5b5d'; x.font = '22px "DejaVu Sans"'; x.fillText('Quote request', 104, 308 - (1 - n) * 40);
+    x.globalAlpha = 1;
+  }
+  phone.t.needsUpdate = true;
+}
+
+// ---------- furniture and figures (stylised, faceless)
+const deskMat = M(0xEFEDE8, 0.55), legMat = M(0x8E979B, 0.4, { metalness: 0.6 }), chairMat = M(0x5d676d, 0.6);
+const aluMat = M(0xC3C7CA, 0.3, { metalness: 0.8 });
+function desk(x, z, warm = false) {
+  const g = new THREE.Group(); g.position.set(x, 0, z);
+  const top = new THREE.Mesh(new RoundedBoxGeometry(1.7, 0.06, 0.85, 2, 0.02), warm ? M(0xD9B48A, 0.45) : deskMat); top.position.y = 0.74; top.castShadow = top.receiveShadow = true; g.add(top);
+  for (const sx of [-0.78, 0.78]) { const l = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.72, 0.7), legMat); l.position.set(sx, 0.37, 0); l.castShadow = true; g.add(l); }
+  scene.add(g); return g;
+}
+function laptop(parent, tex, x = 0, z = -0.08) {
+  const g = new THREE.Group(); g.position.set(x, 0.77, z); parent.add(g);
+  const base = new THREE.Mesh(new RoundedBoxGeometry(0.36, 0.018, 0.25, 2, 0.006), aluMat); base.castShadow = true; g.add(base);
+  const hinge = new THREE.Group(); hinge.position.set(0, 0.01, -0.12); hinge.rotation.x = -0.32; g.add(hinge);
+  const lid = new THREE.Mesh(new RoundedBoxGeometry(0.36, 0.25, 0.012, 2, 0.005), aluMat); lid.position.y = 0.125; lid.castShadow = true; hinge.add(lid);
+  const scr = new THREE.Mesh(new THREE.PlaneGeometry(0.33, 0.206), new THREE.MeshPhysicalMaterial({ map: tex, emissiveMap: tex, emissive: 0xffffff, emissiveIntensity: 0.55, roughness: 0.2, clearcoat: 1 }));
+  scr.position.set(0, 0.125, 0.0065); hinge.add(scr); return { g, scr };
+}
+const capsule = (r, l, mat) => { const m = new THREE.Mesh(new THREE.CapsuleGeometry(r, l, 6, 16), mat); m.castShadow = true; return m; };
+function figure(x, z, bodyCol, headCol) {
+  const bm = M(bodyCol, 0.75, { sheen: 0.6, sheenColor: new THREE.Color(0xffffff) }), hm = M(headCol, 0.5, { clearcoat: 0.3 }), pm = M(0x3b4549, 0.8);
+  const g = new THREE.Group(); g.position.set(x, 0, z); scene.add(g);
+  // chair
+  const seat = new THREE.Mesh(new RoundedBoxGeometry(0.55, 0.08, 0.52, 2, 0.03), chairMat); seat.position.set(0, 0.5, 0.05); seat.castShadow = true; g.add(seat);
+  const back = new THREE.Mesh(new RoundedBoxGeometry(0.52, 0.6, 0.07, 2, 0.03), chairMat); back.position.set(0, 0.9, 0.34); back.castShadow = true; g.add(back);
+  const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.45, 12), legMat); pole.position.set(0, 0.25, 0.05); g.add(pole);
+  // body
+  const torso = capsule(0.2, 0.42, bm); torso.position.set(0, 0.93, 0.12); torso.rotation.x = -0.12; g.add(torso);
+  const neckHead = new THREE.Group(); neckHead.position.set(0, 1.32, 0.06); g.add(neckHead);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.15, 32, 24), hm); head.scale.set(0.92, 1.08, 0.98); head.position.y = 0.1; head.castShadow = true; neckHead.add(head);
+  for (const sx of [-0.12, 0.12]) { const th = capsule(0.085, 0.36, pm); th.rotation.x = Math.PI / 2; th.position.set(sx, 0.58, -0.12); g.add(th); const sh = capsule(0.075, 0.38, pm); sh.position.set(sx, 0.3, -0.32); g.add(sh); }
+  const arms = [];
+  for (const side of [-1, 1]) {
+    const sh = new THREE.Group(); sh.position.set(side * 0.27, 1.13, 0.1); g.add(sh);
+    const up = capsule(0.07, 0.26, bm); up.position.y = -0.17; sh.add(up);
+    const el = new THREE.Group(); el.position.y = -0.33; sh.add(el);
+    const fo = capsule(0.06, 0.24, bm); fo.position.y = -0.15; el.add(fo);
+    const hand = new THREE.Mesh(new THREE.SphereGeometry(0.06, 16, 12), hm); hand.position.y = -0.3; hand.castShadow = true; el.add(hand);
+    sh.rotation.x = -0.55; el.rotation.x = -1.0; arms.push({ sh, el, hand });
+  }
+  return { g, neckHead, torso, arms };
+}
+
+// grey office: three rows of desks, everyone stuck on a frozen screen
+const people = [];
+const greys = [[0x7c878d, 0xb7b1a8], [0x6b767c, 0xa9a39a], [0x8a9399, 0xc2bcb2], [0x5f6a70, 0x9d978e]];
+seed = 5;
+for (const z of [-4.2, -0.6, 3.0]) for (const x of [-11.5, -7.5, -3.5]) {
+  const d = desk(x, z); const lp = laptop(d, frozen[(people.length) % 2].t);
+  const [bc, hc] = greys[people.length % 4]; const p = figure(x, z + 0.75, bc, hc); p.desk = d; people.push(p);
+}
+plant(-13.6, -6.5, 1.3); plant(-1.2, -6.8, 1.1); plant(-14, 4.8, 1.2);
+// the one who keeps refreshing (front row, near the camera path)
+const refresher = people[7];
+// cold coffee on the front desk
+const mugMat = M(0xF7F5F0, 0.35, { clearcoat: 0.5 });
+function mug(parent, x, z) { const g = new THREE.Group(); const b = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.04, 0.1, 24), mugMat); b.castShadow = true; g.add(b); const h = new THREE.Mesh(new THREE.TorusGeometry(0.03, 0.009, 8, 16), mugMat); h.position.set(0.05, 0, 0); h.rotation.y = Math.PI / 2; g.add(h); g.position.set(x, 0.82, z); parent.add(g); return g; }
+const coldMug = mug(refresher.desk, 0.5, 0.14);
+const steam = []; const steamMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.3, depthWrite: false });
+for (let i = 0; i < 10; i++) { const s = new THREE.Mesh(new THREE.SphereGeometry(0.02, 8, 6), steamMat.clone()); coldMug.add(s); steam.push(s); }
+
+// the calm business owner by the sunny window
+const warmDesk = desk(9.2, 1.0, true);
+const warmLap = laptop(warmDesk, inbox.t, -0.15, -0.06);
+warmLap.scr.material.emissiveIntensity = 0.75;
+const owner = figure(9.2, 1.75, 0x115E67, 0xC79A73);
+const phoneMesh = new THREE.Mesh(new RoundedBoxGeometry(0.075, 0.012, 0.15, 2, 0.006), M(0x1d2427, 0.3, { metalness: 0.5 }));
+phoneMesh.position.set(-0.6, 0.78, 0.18); phoneMesh.rotation.y = 0.5; phoneMesh.castShadow = true; warmDesk.add(phoneMesh);
+const phoneScr = new THREE.Mesh(new THREE.PlaneGeometry(0.068, 0.138), new THREE.MeshBasicMaterial({ map: phone.t, toneMapped: false }));
+phoneScr.rotation.x = -Math.PI / 2; phoneScr.position.y = 0.0065; phoneMesh.add(phoneScr);
+const warmMug = new THREE.Group(); const wmb = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.04, 0.1, 24), M(0xF2B66D, 0.4, { clearcoat: 0.6 })); wmb.castShadow = true; warmMug.add(wmb);
+const wmh = new THREE.Mesh(new THREE.TorusGeometry(0.03, 0.009, 8, 16), wmb.material); wmh.position.x = 0.05; wmh.rotation.y = Math.PI / 2; warmMug.add(wmh);
+scene.add(warmMug);
+const wsteam = []; for (let i = 0; i < 10; i++) { const s = new THREE.Mesh(new THREE.SphereGeometry(0.02, 8, 6), steamMat.clone()); warmMug.add(s); wsteam.push(s); }
+plant(11.7, -3.0, 1.4);
+
+// ---------- camera
+const cam = new THREE.PerspectiveCamera(40, W / H, 0.05, 80);
+const V = (x, y, z) => new THREE.Vector3(x, y, z);
+const scrPos = () => warmLap.scr.getWorldPosition(new THREE.Vector3());
+function camAt(f) {
+  // shot 1: slow push between the grey desks, towards the one who keeps refreshing
+  if (f < 75) { const t = sm(f / 75); return [V(-3.4, 3.1, 8.6).lerp(V(-4.6, 2.75, 7.4), t), V(-7.6, 0.8, 0.4).lerp(V(-7.6, 0.85, 0.8), t), 44]; }
+  if (f < S.s2[0]) {   // over the shoulder of the one who keeps refreshing: spinner, tapping hand, cold coffee
+    const t = sm(seg(f, 75, 150)), rs = refresher.desk.localToWorld(V(0, 0.9, -0.12));
+    return [V(-7.18, 1.36, 3.95).lerp(V(-7.24, 1.3, 3.72), t), rs.clone().lerp(rs.clone().add(V(0.02, 0, 0)), t), 40]; }
+  // shot 2: slide across the room to the calm owner by the window
+  if (f < S.s3[0]) {
+    const t1 = sm(seg(f, 150, 210)), t2 = sm(seg(f, 210, 300));
+    // slide across the room, then settle on a front three quarter view of the owner, sun from the window
+    const p = V(-6.5, 1.75, 5.4).lerp(V(7.2, 1.62, -0.9), t1).lerp(V(7.75, 1.52, -0.45), t2);
+    const lk = V(-7.0, 1.0, 2.0).lerp(V(9.3, 1.08, 1.45), sm(seg(f, 150, 212)));
+    return [p, lk, 40];
+  }
+  // shot 3: push in over the owner's shoulder until the inbox fills the frame
+  // shot 3: an insert of the laptop screen, slow push as the emails keep arriving
+  const sp = scrPos(), t = sm(seg(f, 300, 450));
+  const n = new THREE.Vector3(0, 0, 1).applyQuaternion(warmLap.scr.getWorldQuaternion(new THREE.Quaternion()));
+  return [sp.clone().addScaledVector(n, lerp(1.32, 1.2, t)).add(V(0.0, 0.05, 0)), sp.clone().add(V(0, -0.005, 0)), 36];
+}
+
+// ---------- per frame
+function update(f) {
+  drawFrozen(f); drawInbox(f); drawPhone(f);
+  // everyone idles, shoulders rise and fall; the refresher taps again and again
+  people.forEach((p, i) => {
+    const br = Math.sin(f * 0.06 + i) * 0.01; p.torso.position.y = 0.93 + br;
+    p.neckHead.rotation.x = 0.18 + Math.sin(f * 0.03 + i * 2) * 0.03; p.neckHead.rotation.z = Math.sin(f * 0.02 + i) * 0.04;
+    p.arms.forEach((a, k) => { a.sh.rotation.x = -0.55 + Math.sin(f * 0.04 + i + k) * 0.02; a.el.rotation.x = -1.0; });
+  });
+  const tap = Math.max(0, Math.sin(f * 0.55)) ** 3; refresher.arms[1].el.rotation.x = -1.0 - tap * 0.25; refresher.arms[1].sh.rotation.x = -0.6 - tap * 0.06;
+  refresher.neckHead.rotation.x = 0.1 + tap * 0.04;
+  // the coffee goes cold: steam fades away during shot 1
+  steam.forEach((s, i) => { const t = ((f * 0.012 + i / 10) % 1); s.position.set(Math.sin(t * 9 + i) * 0.02, 0.06 + t * 0.22, Math.cos(t * 7 + i) * 0.02); s.material.opacity = 0.32 * Math.sin(t * Math.PI) * (1 - sm(seg(f, 20, 120))); s.scale.setScalar(1 + t * 2.5); });
+  // the owner: phone pings, sips coffee, smiles (a small nod), replies
+  owner.g.visible = f < S.s3[0];
+  const o = owner;
+  o.torso.position.y = 0.93 + Math.sin(f * 0.05) * 0.008;
+  const lift = sm(seg(f, 214, 236)) * (1 - sm(seg(f, 252, 272)));
+  const R = o.arms[1], L = o.arms[0];
+  R.sh.rotation.x = lerp(-0.55, -1.25, lift); R.sh.rotation.z = lerp(0, 0.25, lift); R.el.rotation.x = lerp(-1.0, -2.1, lift);
+  o.neckHead.rotation.x = lerp(0.12, -0.12, lift) + (f > 274 ? -0.06 * Math.sin(seg(f, 274, 290) * Math.PI) : 0);
+  o.neckHead.rotation.z = 0.08 * Math.sin(seg(f, 238, 262) * Math.PI);      // a content little tilt
+  const reply = Math.max(0, Math.sin((f - 280) * 0.7)) ** 2 * (f > 280 && f < 300 ? 1 : 0);
+  L.el.rotation.x = -1.0 - reply * 0.15; L.sh.rotation.x = -0.58;
+  // mug follows the right hand while lifted, rests on the desk otherwise
+  const rest = warmDesk.localToWorld(V(0.32, 0.82, 0.22)); const hand = R.hand.getWorldPosition(new THREE.Vector3());
+  warmMug.position.copy(rest.lerp(hand.add(V(0.02, 0.02, -0.02)), sm(seg(f, 212, 222)) * (1 - sm(seg(f, 262, 272)))));
+  wsteam.forEach((s, i) => { const t = ((f * 0.012 + i / 10) % 1); s.position.set(Math.sin(t * 9 + i) * 0.02, 0.06 + t * 0.22, Math.cos(t * 7 + i) * 0.02); s.material.opacity = 0.35 * Math.sin(t * Math.PI); s.scale.setScalar(1 + t * 2.5); });
+  phoneScr.material.color.setScalar(1);
+  warmFill.intensity = lerp(0, 14, sm(seg(f, 160, 230)));
+  const [p, lk, fov] = camAt(f); cam.position.copy(p); cam.lookAt(lk); cam.fov = fov; cam.updateProjectionMatrix();
+  // colour grade: muted grey blue and tense, then warm and vibrant
+  const w = sm(seg(f, 165, 235));
+  renderer.domElement.style.filter = `saturate(${lerp(0.35, 1.12, w)}) contrast(${lerp(0.94, 1.04, w)}) brightness(${lerp(0.9, 1.04, w)})`;
+  const g = document.getElementById('grade');
+  g.style.background = `linear-gradient(180deg, rgba(${Math.round(lerp(70, 255, w))},${Math.round(lerp(92, 196, w))},${Math.round(lerp(118, 130, w))},${lerp(0.22, 0.10, w)}), rgba(${Math.round(lerp(40, 255, w))},${Math.round(lerp(55, 170, w))},${Math.round(lerp(70, 90, w))},${lerp(0.25, 0.06, w)}))`;
+  g.style.mixBlendMode = w < 0.5 ? 'multiply' : 'soft-light';
+  // on screen text
+  const word = (id, a, b, hold) => { const el = document.getElementById(id); const p = eQ(seg(f, a, a + 18)); el.firstElementChild.style.transform = `translateY(${(1 - p) * 135}%)`; const x = sm(seg(f, b - 10, b)); el.style.opacity = 1 - x; el.style.filter = `blur(${x * 6}px)`; el.style.display = f >= a - 1 && f < b ? 'block' : 'none'; };
+  word('T1', 18, 146); word('T1b', 26, 146); word('T2a', 176, 296); word('T2b', 184, 296);
+  word('T3a', 336, 446); word('T3b', 352, 446); word('T3c', 368, 446);
+  document.getElementById('band').style.opacity = 0.85 * sm(seg(f, 4, 20)) * (1 - sm(seg(f, 440, 452)));
+  // end card
+  const e = sm(seg(f, S.end, S.end + 18)); document.getElementById('end').style.opacity = e;
+  // logo: the outline draws itself, then fills (stroke draw reveal)
+  const lw = document.getElementById('lw'); lw.setAttribute('stroke-dashoffset', 1400 * (1 - sm(seg(f, S.end + 6, S.end + 34))));
+  lw.setAttribute('fill-opacity', sm(seg(f, S.end + 26, S.end + 40))); lw.setAttribute('stroke-opacity', 1 - 0.6 * sm(seg(f, S.end + 34, S.end + 46)));
+  const lg = document.getElementById('logo'); [...lg.children].slice(1).forEach(el => { el.style.opacity = sm(seg(f, S.end + 30, S.end + 42)); });
+  document.getElementById('glow').style.transform = `scale(${0.9 + 0.1 * sm(seg(f, S.end, S.end + 60))})`;
+  [['e1', S.end + 24], ['e2', S.end + 32], ['e3', S.end + 52]].forEach(([id, a]) => { const el = document.getElementById(id); el.style.opacity = sm(seg(f, a, a + 10)); el.style.transform = `translateY(${(1 - eQ(seg(f, a, a + 14))) * 20}px)`; });
+  const c = document.getElementById('cta'), cp = eQ(seg(f, S.end + 42, S.end + 58)); c.style.opacity = sm(seg(f, S.end + 42, S.end + 50)); c.style.transform = `scale(${0.9 + 0.1 * cp})`;
+  document.getElementById('sheen').style.left = `${lerp(-140, 470, sm(seg(f, S.end + 62, S.end + 82)))}px`;     // one sheen sweep, then still
+  // notification pop when the owner's phone pings
+  const tp = eQ(seg(f, 200, 214)), tx = sm(seg(f, 262, 276)), toast = document.getElementById('toast');
+  toast.style.opacity = sm(seg(f, 200, 208)) * (1 - tx); toast.style.transform = `translateY(${(1 - tp) * 60 + tx * 30}px) scale(${0.96 + 0.04 * tp})`;
+  // highlight swipe under "offline today."
+  const u = eQ(seg(f, 196, 214)) * (1 - sm(seg(f, 286, 296))); document.getElementById('ul').style.width = `${u * 540}px`;
+}
+window.renderFrame = f => { update(f); renderer.render(scene, cam); return true; };
+window.ready = true;
+if (!location.search.includes('render')) { const t0 = performance.now(); const loop = () => { window.renderFrame(((performance.now() - t0) / 1000 * 30) % N); requestAnimationFrame(loop); }; loop(); }
+</script></body></html>
