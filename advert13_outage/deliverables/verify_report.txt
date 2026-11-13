@@ -1,0 +1,26 @@
+== Streams
+nimble_tech_solutions_still_online_voiceover.mp4
+  video 1080x1920 h264 fps(r) 30/1, frames counted 600, video duration 20.000000 s, container duration 20.000000 s
+  audio streams: 1 aac 48000 Hz 2 ch, duration 20.000000 s
+  metadata tags left: {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso2avc1mp41', 'stream0:language': 'und', 'stream0:handler_name': 'VideoHandler', 'stream0:vendor_id': '[0][0][0][0]', 'stream1:language': 'und', 'stream1:handler_name': 'SoundHandler', 'stream1:vendor_id': '[0][0][0][0]'}
+nimble_tech_solutions_still_online_silent.mp4
+  video 1080x1920 h264 fps(r) 30/1, frames counted 600, video duration 20.000000 s, container duration 20.000000 s
+  audio streams: 0 
+  metadata tags left: {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso2avc1mp41', 'stream0:language': 'und', 'stream0:handler_name': 'VideoHandler', 'stream0:vendor_id': '[0][0][0][0]'}
+
+== Loudness and true peak measured on the finished MP4 audio track
+  integrated -13.9 LUFS, true peak -5.2 dBTP, LRA 9.3 LU
+
+== Sound to picture (onsets found in the decoded MP4 audio vs. the frame each sound is cued to)
+  decoded audio samples 960512 (20.0107 s)
+  phone ping      cue frame 200 (6.667 s)  onset 6.618 s  offset -48 ms
+  first email     cue frame 312 (10.400 s)  onset 10.352 s  offset -48 ms
+  end card        cue frame 450 (15.000 s)  onset 14.999 s  offset -1 ms
+  whole track offset vs pre encode mix: +0 samples (+0.00 ms); every cue is placed at its exact frame in code
+
+== Tool names / provenance strings left in files
+  nimble_tech_solutions_still_online_music.mp4            none found
+  nimble_tech_solutions_still_online_poster.jpg           none found
+  nimble_tech_solutions_still_online_poster.png           none found
+  nimble_tech_solutions_still_online_silent.mp4           none found
+  nimble_tech_solutions_still_online_voiceover.mp4        none found
